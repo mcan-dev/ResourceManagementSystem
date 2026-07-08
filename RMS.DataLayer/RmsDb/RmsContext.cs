@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using RMS.DataLayer.Entities;
 
-namespace RMS.DataLayer.Data;
+namespace RMS.DataLayer.RmsDb;
 
 public partial class RmsContext : DbContext
 {
@@ -22,7 +22,7 @@ public partial class RmsContext : DbContext
 
     public virtual DbSet<EmployeePriority> EmployeePriorities { get; set; }
 
-    public virtual DbSet<Leaf> Leaves { get; set; }
+    public virtual DbSet<Leave> Leaves { get; set; }
 
     public virtual DbSet<LeaveStatus> LeaveStatuses { get; set; }
 
@@ -170,7 +170,7 @@ public partial class RmsContext : DbContext
                 .HasColumnName("updated_at");
         });
 
-        modelBuilder.Entity<Leaf>(entity =>
+        modelBuilder.Entity<Leave>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("leaves_pkey");
 

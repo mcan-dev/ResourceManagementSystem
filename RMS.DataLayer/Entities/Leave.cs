@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RMS.DataLayer.Entities;
 
-public partial class Leaf
+public partial class Leave
 {
     public int Id { get; set; }
 

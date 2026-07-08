@@ -33,7 +33,7 @@ public partial class Employee
 
     public virtual ICollection<EmployeeCapacity> EmployeeCapacities { get; set; } = new List<EmployeeCapacity>();
 
-    public virtual ICollection<Leaf> Leaves { get; set; } = new List<Leaf>();
+    public virtual ICollection<Leave> Leaves { get; set; } = new List<Leave>();
 
     public virtual ICollection<ProjectEmployee> ProjectEmployees { get; set; } = new List<ProjectEmployee>();
 
