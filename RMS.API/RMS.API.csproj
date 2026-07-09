@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RMS.DataLayer\RMS.DataLayer.csproj" />
+    <ProjectReference Include="..\RMS.RepositoryLayer\RMS.RepositoryLayer.csproj" />
     <ProjectReference Include="..\RMS.ServiceLayer\RMS.ServiceLayer.csproj" />
   </ItemGroup>
 

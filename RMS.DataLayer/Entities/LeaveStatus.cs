@@ -13,5 +13,5 @@ public partial class LeaveStatus
 
     public DateTime UpdatedAt { get; set; }
 
-    public virtual ICollection<Leave> Leaves { get; set; } = new List<Leave>();
+    public virtual ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
 }

@@ -20,4 +20,6 @@ public partial class TaskAssignment
     public virtual Employee Employee { get; set; } = null!;
 
     public virtual ProjectTask Task { get; set; } = null!;
+
+    public virtual TaskProgress? TaskProgress { get; set; }
 }

@@ -20,6 +20,7 @@ namespace RMS.API.Controllers
         {
             return Ok(new { Message = "Sistem ayakta! Bağlantı kopmadı." });
         }
+
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDto loginDto)
         {

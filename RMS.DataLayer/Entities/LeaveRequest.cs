@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RMS.DataLayer.Entities;
 
-public partial class Leave
+public partial class LeaveRequest
 {
     public int Id { get; set; }
 
@@ -26,4 +26,6 @@ public partial class Leave
     public virtual Employee Employee { get; set; } = null!;
 
     public virtual LeaveStatus? LeaveStatus { get; set; }
+
+    public virtual ICollection<LeaveTransaction> LeaveTransactions { get; set; } = new List<LeaveTransaction>();
 }

@@ -1,6 +1,6 @@
 ﻿namespace RMS.RepositoryLayer;
 
-public class Class1
+public class ProjectEmployeeRepository
 {
 
 }

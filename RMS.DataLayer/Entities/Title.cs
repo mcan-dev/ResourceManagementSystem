@@ -7,7 +7,7 @@ public partial class Title
 {
     public int Id { get; set; }
 
-    public string? TitleName { get; set; }
+    public string TitleName { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
 
