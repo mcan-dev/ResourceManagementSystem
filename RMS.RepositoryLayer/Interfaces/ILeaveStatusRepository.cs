@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RMS.RepositoryLayer.Interfaces
 {
-    internal class ILeaveStatusRepository
+    public interface ILeaveStatusRepository
     {
     }
 }

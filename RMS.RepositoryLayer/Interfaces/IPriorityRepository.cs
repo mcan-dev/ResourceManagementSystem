@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RMS.RepositoryLayer.Interfaces
 {
-    internal class IPriorityRepository
+    public interface IPriorityRepository
     {
     }
 }
