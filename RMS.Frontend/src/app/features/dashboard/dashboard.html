@@ -1,0 +1,57 @@
+<h1 class="page-title">
+    Dashboard
+</h1>
+
+<!-- Özet Kartlar -->
+<div class="cards">
+
+    <mat-card class="card">
+        <h3>Employees</h3>
+        <p>25</p>
+    </mat-card>
+
+    <mat-card class="card">
+        <h3>Projects</h3>
+        <p>8</p>
+    </mat-card>
+
+    <mat-card class="card">
+        <h3>Capacity</h3>
+        <p>%82</p>
+    </mat-card>
+
+    <mat-card class="card">
+        <h3>Leave Requests</h3>
+        <p>3</p>
+    </mat-card>
+
+</div>
+
+<!-- Grafik Alanı -->
+<div class="charts">
+
+    <mat-card class="chart-card">
+
+        <h2>Role Capacity</h2>
+
+    </mat-card>
+
+    <mat-card class="usage-card">
+
+    <h2>Usage</h2>
+
+    <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [labels]="chartOptions.labels">
+    </apx-chart>
+
+</mat-card>
+
+</div>
+
+<mat-card class="activity-card">
+
+    <h2>Recent Activities</h2>
+
+</mat-card>
