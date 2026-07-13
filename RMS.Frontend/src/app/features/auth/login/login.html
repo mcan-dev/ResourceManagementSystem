@@ -1,0 +1,79 @@
+<div class="login-container">
+
+  <div class="login-header">
+    <h3>Resource Management System</h3>
+</div>
+
+  <mat-card class="login-card">
+
+    <h2>Giriş Yap</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+
+<mat-form-field appearance="outline">
+
+  <mat-label>E-posta</mat-label>
+  <input
+    matInput
+    type="email"
+    formControlName="email">
+
+  @if (loginForm.get('email')?.hasError('required')) {
+    <mat-error>E-posta zorunludur.</mat-error>
+  }
+
+  @if (loginForm.get('email')?.hasError('email')) {
+    <mat-error>Geçerli bir e-posta adresi giriniz.</mat-error>
+  }
+</mat-form-field>
+
+
+<mat-form-field appearance="outline">
+
+  <mat-label>Şifre</mat-label>
+
+  <mat-icon matPrefix>lock</mat-icon>
+
+  <input
+    matInput
+    [type]="hidePassword ? 'password' : 'text'"
+    formControlName="password">
+
+  <button
+    mat-icon-button
+    matSuffix
+    type="button"
+    (click)="hidePassword = !hidePassword">
+
+    <mat-icon>
+      {{ hidePassword ? 'visibility_off' : 'visibility' }}
+    </mat-icon>
+
+  </button>
+
+  @if (loginForm.get('password')?.hasError('required')) {
+    <mat-error>Şifre zorunludur.</mat-error>
+  }
+
+</mat-form-field>
+
+     <button
+     class="login-button"
+     mat-raised-button
+     color="primary"
+     type="submit">
+
+     Giriş Yap
+
+    </button>
+
+    </form>
+
+  </mat-card>
+
+  <p class="footer">
+    © 2026 Resource Management System
+  </p>
+
+</div>
