@@ -6,6 +6,8 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { LoginRequest } from '../../../core/models/login.model';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -26,7 +28,7 @@ export class Login {
 
   loginForm: FormGroup;
   hidePassword = true;
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
 
     this.loginForm = this.fb.group({
 
@@ -41,6 +43,7 @@ export class Login {
 
   onSubmit() {
 
+  console.log("YENİ LOGIN TS ÇALIŞIYOR");
   console.log("Butona basıldı");
 
   if (this.loginForm.invalid) {
@@ -48,11 +51,33 @@ export class Login {
     return;
   }
 
-  console.log("Dashboard'a gidiyor");
+ const loginData: LoginRequest = {
+  email: this.loginForm.value.email,
+  password: this.loginForm.value.password
+};
 
-  this.router.navigateByUrl('/dashboard')
-  .then(result => console.log('Navigate Result:', result))
-  .catch(err => console.error(err));
+this.authService.login(loginData).subscribe({
+
+  next: (response: any) => {
+
+    console.log('Login başarılı:', response);
+
+    this.router.navigate(['/dashboard']);
+
+  },
+
+  error: (error) => {
+
+  console.log(error);
+
+  console.log("Status:", error.status);
+  console.log("Body:", error.error);
+
+  alert(JSON.stringify(error.error, null, 2));
+
+}
+
+});
 
 }
 }

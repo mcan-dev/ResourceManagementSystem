@@ -21,13 +21,24 @@ builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
 builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
 builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
 builder.Services.AddScoped<ILeaveStatusRepository, LeaveStatusRepository>();
-
 builder.Services.AddDbContext<RmsContext>(options =>
+
 {
-  
-    var connectionString = "Server=.\\SQLEXPRESS;Database=RMS;Trusted_Connection=True;TrustServerCertificate=True;";
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+Console.WriteLine("Connection String:");
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,7 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
 
 var summaries = new[]
 {
@@ -59,6 +70,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 app.UseHttpsRedirection();
+app.UseCors("AllowAngular");
 app.UseAuthorization();
 
 app.MapControllers();
