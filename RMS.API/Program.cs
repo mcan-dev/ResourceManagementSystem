@@ -3,6 +3,7 @@ using RMS.DataLayer.RmsDb;
 using RMS.RepositoryLayer.Interfaces;
 using RMS.RepositoryLayer.Repositories;
 using RMS.RepositoryLayer.Repositories.RMS.RepositoryLayer.Repositories;
+using RMS.ServiceLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,9 @@ builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
 builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
 builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
 builder.Services.AddScoped<ILeaveStatusRepository, LeaveStatusRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddDbContext<RmsContext>(options =>
+
 
 {
     options.UseSqlServer(

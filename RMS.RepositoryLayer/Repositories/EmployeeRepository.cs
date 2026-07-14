@@ -32,9 +32,11 @@ namespace RMS.RepositoryLayer.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<Employee> GetEmployeeByEmailAsync(string email)
+        public async Task<Employee?> GetEmployeeByEmailAsync(string email)
         {
             return await _context.Employees
+                .Include(e => e.Team)
+                .Include(e => e.Title)
                 .FirstOrDefaultAsync(e => e.Email == email);
         }
 
