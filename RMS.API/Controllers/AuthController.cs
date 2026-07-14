@@ -30,12 +30,13 @@ namespace RMS.API.Controllers
                 if (string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
                     return BadRequest(new { Message = "E-posta ve şifre boş bırakılamaz." });
 
-              
+
                 var user = _context.Employees.FirstOrDefault(u =>
                     u.Email == loginDto.Email &&
                     u.PasswordHash == loginDto.Password);
 
-                
+
+
                 if (user == null)
                     return Unauthorized(new { Message = "Hatalı e-posta veya şifre girdiniz." });
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RMS.RepositoryLayer.Repositories
 {
-    internal class IWorkCalendarRepository : IGenericRepository<WorkCalendar>
+    public interface IWorkCalendarRepository : IGenericRepository<WorkCalendar>
     {
     }
 }

@@ -9,6 +9,9 @@ namespace RMS.RepositoryLayer.Interfaces
 {
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
-     
+        Task<IEnumerable<Employee>> GetAllEmployeesWithDetailsAsync();
+        Task<Employee> GetEmployeeWithDetailsByIdAsync(int id);
+        Task<Employee> GetEmployeeByEmailAsync(string email);
+        Task<IEnumerable<Employee>> GetEmployeesByTeamIdAsync(int teamId);
     }
 }

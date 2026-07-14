@@ -1,20 +1,44 @@
 using Microsoft.EntityFrameworkCore;
 using RMS.DataLayer.RmsDb;
+using RMS.RepositoryLayer.Interfaces;
+using RMS.RepositoryLayer.Repositories;
+using RMS.RepositoryLayer.Repositories.RMS.RepositoryLayer.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
+builder.Services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ITitleRepository, TitleRepository>();
+builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
+builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
+builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
+builder.Services.AddScoped<ILeaveStatusRepository, LeaveStatusRepository>();
 builder.Services.AddDbContext<RmsContext>(options =>
+
 {
-  
-    var connectionString = "Server=.\\SQLEXPRESS;Database=RMS;Trusted_Connection=True;TrustServerCertificate=True;";
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+Console.WriteLine("Connection String:");
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
 
 var summaries = new[]
 {
@@ -46,6 +70,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 app.UseHttpsRedirection();
+app.UseCors("AllowAngular");
 app.UseAuthorization();
 
 app.MapControllers();
