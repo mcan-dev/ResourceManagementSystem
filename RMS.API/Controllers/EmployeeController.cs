@@ -9,10 +9,14 @@ namespace RMS.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeCapacityService _employeeCapacityService;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(
+    IEmployeeService employeeService,
+    IEmployeeCapacityService employeeCapacityService)
         {
             _employeeService = employeeService;
+            _employeeCapacityService = employeeCapacityService;
         }
 
         [HttpGet]
@@ -112,7 +116,18 @@ namespace RMS.API.Controllers
             }
             return NoContent();
         }
-      
+        [HttpGet("{id}/capacity-summary")]
+        public async Task<IActionResult> GetEmployeeCapacitySummary(int id)
+        {
+            var summary = await _employeeCapacityService.GetEmployeeCapacitySummaryAsync(id);
+
+            if (summary == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(summary);
+        }
 
     }
 }

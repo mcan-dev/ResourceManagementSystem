@@ -123,12 +123,12 @@ public class EmployeeService : IEmployeeService
 
         if (request.TeamId.HasValue)
         {
-            employee.TeamId = request.TeamId;
+            employee.TeamId = request.TeamId.Value;
         }
 
         if (request.TitleId.HasValue)
         {
-            employee.TitleId = request.TitleId;
+            employee.TitleId = request.TitleId.Value;
         }
 
         if (request.Username is not null)

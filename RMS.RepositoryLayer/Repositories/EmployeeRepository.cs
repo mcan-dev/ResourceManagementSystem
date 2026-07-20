@@ -24,7 +24,7 @@ namespace RMS.RepositoryLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Employee> GetEmployeeWithDetailsByIdAsync(int id)
+        public async Task<Employee?> GetEmployeeWithDetailsByIdAsync(int id)
         {
             return await _context.Employees
                 .Include(e => e.Team)

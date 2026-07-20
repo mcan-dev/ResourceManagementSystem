@@ -22,7 +22,9 @@ builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
 builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
 builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
 builder.Services.AddScoped<ILeaveStatusRepository, LeaveStatusRepository>();
+builder.Services.AddScoped<IEmployeeCapacityRepository, EmployeeCapacityRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeCapacityService, EmployeeCapacityService>();
 builder.Services.AddDbContext<RmsContext>(options =>
 
 

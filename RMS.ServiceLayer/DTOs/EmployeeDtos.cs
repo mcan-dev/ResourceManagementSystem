@@ -33,9 +33,9 @@ public class CreateEmployeeRequest
     [StringLength(10)]
     public string? Gender { get; set; }
 
-    public int? TeamId { get; set; }
+    public int TeamId { get; set; }
 
-    public int? TitleId { get; set; }
+    public int TitleId { get; set; }
 
     [StringLength(100)]
     public string? Username { get; set; }
