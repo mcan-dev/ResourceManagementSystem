@@ -56,10 +56,15 @@ public partial class RmsContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Employee>(entity =>
+
         {
+            entity.ToTable("employees", tb =>
+            {
+                tb.HasTrigger("trg_employees_Update_UpdatedAt");
+            });
+
             entity.HasKey(e => e.Id).HasName("PK__employee__3213E83F962105F8");
 
-            entity.ToTable("employees");
 
             entity.HasIndex(e => e.Email, "UQ__employee__AB6E6164CCBB0671").IsUnique();
 
@@ -84,7 +89,7 @@ public partial class RmsContext : DbContext
                 .HasColumnName("password_hash");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
-                .HasDefaultValue("active")
+                .HasDefaultValue("aktif")
                 .HasColumnName("status");
             entity.Property(e => e.Surname)
                 .HasMaxLength(100)

@@ -23,8 +23,10 @@ builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
 builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
 builder.Services.AddScoped<ILeaveStatusRepository, LeaveStatusRepository>();
 builder.Services.AddScoped<IEmployeeCapacityRepository, EmployeeCapacityRepository>();
+builder.Services.AddScoped<IWorkCalendarRepository, WorkCalendarRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEmployeeCapacityService, EmployeeCapacityService>();
+builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddDbContext<RmsContext>(options =>
 
 
@@ -44,6 +46,21 @@ builder.Services.AddCors(options =>
 });
 Console.WriteLine("Connection String:");
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+// Program.cs içerisine ekle (builder.Build() satýrýndan önce)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Angular'ýn adresi
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,6 +96,8 @@ app.UseCors("AllowAngular");
 app.UseAuthorization();
 
 app.MapControllers();
+// app.Run() satýrýndan önce middleware'i çaðýr
+app.UseCors("AllowAngular");
 
 app.Run();
 

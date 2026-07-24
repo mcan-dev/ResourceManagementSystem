@@ -11,5 +11,9 @@ namespace RMS.RepositoryLayer.Interfaces
     {
         Task<IEnumerable<LeaveRequest>> GetLeaveRequestsByEmployeeIdAsync(int employeeId);
         Task<IEnumerable<LeaveRequest>> GetLeaveRequestsByStatusAsync(int statusId);
+        Task<IEnumerable<LeaveRequest>> GetMonthlyLeaveRequestsAsync(
+            int year,
+            int month,
+            CancellationToken cancellationToken = default);
     }
 }
