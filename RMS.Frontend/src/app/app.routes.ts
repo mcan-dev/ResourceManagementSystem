@@ -3,9 +3,9 @@ import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Dashboard } from './features/dashboard/dashboard';
 
-import { Employees } from './features/employees/employees';
+import { EmployeeCapacity } from './features/employee-capacity/employee-capacity';
 import { Projects } from './features/projects/projects';
-import { Calendar } from './features/calendar/calendar';
+import { CalendarComponent } from './features/calendar/calendar';
 import { LeaveRequest } from './features/leave-request/leave-request';
 import { Settings } from './features/settings/settings';
 
@@ -32,16 +32,16 @@ export const routes: Routes = [
         component: Dashboard
       },
       {
-        path: 'employees',
-        component: Employees
+        path: 'employee-capacity',
+        component: EmployeeCapacity
       },
-      {
+           {
         path: 'projects',
         component: Projects
       },
       {
         path: 'calendar',
-        component: Calendar
+        component: CalendarComponent
       },
       {
         path: 'leave-request',

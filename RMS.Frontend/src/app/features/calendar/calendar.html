@@ -1,1 +1,59 @@
-<p>calendar works!</p>
+<div class="calendar-card">
+  <!-- Üst Başlık ve Navigasyon -->
+  <div class="cal-head">
+    <div class="cal-title">{{ monthName }} {{ currentYear }}</div>
+    <div class="cal-nav">
+      <button class="btn btn-o" (click)="prevMonth()">‹ Önceki</button>
+      <button class="btn btn-o" (click)="goToToday()">Bugün</button>
+      <button class="btn btn-o" (click)="nextMonth()">Sonraki ›</button>
+    </div>
+  </div>
+
+  <div class="cal-body">
+    <!-- Yükleniyor / Hata -->
+    <div class="loading-container" *ngIf="isLoading$ | async">
+      <mat-spinner diameter="40"></mat-spinner>
+      <div class="loading-text">Takvim verileri yükleniyor...</div>
+    </div>
+
+    <div class="error-container" *ngIf="error$ | async as errorMessage">
+      <div class="alert error-alert">{{ errorMessage }}</div>
+    </div>
+
+    <!-- Takvim Izgarası -->
+    <ng-container *ngIf="(isLoading$ | async) === false && (error$ | async) === null">
+      <div class="calendar-container" *ngIf="calendarDays$ | async as calendarDays">
+        
+        <div class="cal-grid header">
+          <div class="cal-dow" *ngFor="let day of weekDays">{{ day }}</div>
+        </div>
+
+        <div class="cal-grid">
+          <div class="cal-cell" 
+               *ngFor="let day of calendarDays" 
+               [class.other]="!day.isCurrentMonth"
+               [class.wknd]="day.isWeekend"
+               [class.today]="day.isToday"
+               [class.hol]="day.isHoliday">
+            
+            <ng-container *ngIf="day.isCurrentMonth">
+              <div class="d">{{ day.dayNumber }}</div>
+              
+              <!-- Resmi Tatil -->
+              <div class="hol-n" *ngIf="day.isHoliday">
+                🎌 {{ day.holidayName }}
+              </div>
+
+              <!-- Sadece İzinliler (İsim ve Soyisim tam liste) -->
+              <div class="lv-n" *ngIf="day.leaveEmployees.length > 0">
+                ✈ {{ day.leaveEmployees.join(', ') }}
+              </div>
+            </ng-container>
+
+          </div>
+        </div>
+        
+      </div>
+    </ng-container>
+  </div>
+</div>
