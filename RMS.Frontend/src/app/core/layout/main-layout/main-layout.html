@@ -1,11 +1,19 @@
-<app-navbar></app-navbar>
-
 <div class="layout">
 
+  <!-- Sidebar solda, en tepeye kadar uzanacak -->
   <app-sidebar></app-sidebar>
 
-  <main class="content">
-    <router-outlet></router-outlet>
-  </main>
+  <!-- Sağ tarafın tamamını kapsayan yeni taşıyıcı -->
+  <div class="right-side">
+    
+    <!-- Navbar sağ tarafın en üstünde -->
+    <app-navbar></app-navbar>
+
+    <!-- Proje kartları ve diğer sayfalar Navbar'ın altında -->
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
 
 </div>

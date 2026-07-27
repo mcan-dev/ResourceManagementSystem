@@ -12,6 +12,10 @@ public partial class TaskAssignment
     public int EmployeeId { get; set; }
 
     public decimal? AssignedHours { get; set; }
+    public decimal CompletedHours { get; set; }
+
+    public decimal? LeftHours { get; set; }
+    public string Status { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
 

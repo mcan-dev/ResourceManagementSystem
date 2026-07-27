@@ -9,8 +9,6 @@ public partial class EmployeePriority
 
     public string PriorityName { get; set; } = null!;
 
-    public int PriorityLevel { get; set; }
-
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }

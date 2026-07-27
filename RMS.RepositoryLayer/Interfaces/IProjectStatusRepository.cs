@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RMS.RepositoryLayer.Repositories
+namespace RMS.RepositoryLayer.Interfaces
 {
     public interface IProjectStatusRepository : IGenericRepository<ProjectStatus>
     {

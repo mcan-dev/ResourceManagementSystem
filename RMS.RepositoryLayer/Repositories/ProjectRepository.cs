@@ -19,17 +19,31 @@ namespace RMS.RepositoryLayer.Repositories
         public async Task<IEnumerable<Project>> GetAllProjectsWithDetailsAsync()
         {
             return await _context.Projects
-                .Include(p => p.ProjectStatus)
-                .Include(p => p.Priority)     
-                .ToListAsync();
+                .Include(p => p.ProjectTasks)
+                    .ThenInclude(t => t.TaskAssignments)
+                .ToListAsync(); 
         }
 
         public async Task<IEnumerable<Project>> GetProjectsByStatusAsync(int statusId)
         {
             return await _context.Projects
                 .Where(p => p.ProjectStatusId == statusId)
-                .Include(p => p.Priority)
+                .Include(p => p.PriorityId)
                 .ToListAsync();
+        }
+
+        public async Task<Project?> GetProjectWithDetailsAsync(int projectId)
+        {
+            return await _context.Projects
+               
+                .Include(p => p.ProjectTasks)                 
+                    .ThenInclude(t => t.TaskAssignments)                  
+                        .ThenInclude(a => a.Employee)
+                            .ThenInclude(e => e.Title)
+                .Include(p => p.ProjectTasks)
+                    .ThenInclude(t => t.TaskAssignments)
+                        .ThenInclude(a => a.TaskProgress)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace RMS.RepositoryLayer.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression);
         Task AddAsync(T entity);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
         void Update(T entity);
         void Delete(T entity);
     }

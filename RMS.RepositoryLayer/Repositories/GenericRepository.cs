@@ -39,6 +39,15 @@ namespace RMS.RepositoryLayer.Interfaces
             await _dbSet.AddAsync(entity);
         }
 
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
         public void Update(T entity)
         {
             _dbSet.Update(entity); 

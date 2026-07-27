@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { PageHeaderService } from '../../core/services/page-header';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,18 +15,21 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 })
 export class Dashboard {
 
-  chartOptions = {
+chartOptions = {
     series: [82, 18],
-
     chart: {
       type: 'donut' as const,
       height: 280
     },
-
     labels: [
       'Used',
       'Available'
     ]
   };
+   constructor(private pageHeaderService: PageHeaderService) {}
 
+  ngOnInit() {
+  
+    this.pageHeaderService.setTitle('Dashboard')
+  }
 }

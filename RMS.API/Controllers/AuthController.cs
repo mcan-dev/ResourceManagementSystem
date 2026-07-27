@@ -41,7 +41,7 @@ namespace RMS.API.Controllers
                     return Unauthorized(new { Message = "Hatalı e-posta veya şifre girdiniz." });
 
                
-                if (user.Status != "active")
+                if (user.Status != "Aktif")
                     return BadRequest(new { Message = "Hesabınız aktif durumda değil." });
 
                

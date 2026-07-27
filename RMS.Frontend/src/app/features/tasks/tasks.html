@@ -1,0 +1,247 @@
+<div class="task-management-container">
+  
+  <!-- Üst Araç Çubuğu (Filtreler ve Buton) -->
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="search-icon">🔍</i>
+      <input type="text" name="searchTask" id="searchTask" placeholder="Görev, proje veya kişi ara...">
+    </div>
+    
+    <div class="filters">
+      <!-- name ve id eklendi -->
+      <select name="statusFilter" id="statusFilter"><option>Durum: Tümü</option></select>
+      <select name="projectFilter" id="projectFilter"><option>Proje: Tümü</option></select>
+      <select name="teamFilter" id="teamFilter"><option>Ekip: Tümü</option></select>
+    </div>
+
+   <button class="btn-new-task" (click)="openNewTaskModal()">+ Yeni Görev</button>
+  </div>
+
+  <!-- Görev Tablosu -->
+  <div class="table-container">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>GÖREV</th>
+          <th>ATAMALAR</th>
+          <th>DURUM</th>
+          <th>TARİH</th>
+          <th>İLERLEME</th>
+          <th></th> 
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngIf="!tasks || tasks.length === 0">
+          <td colspan="6" style="text-align: center; padding: 40px; color: var(--muted); font-size: 13.5px;">
+            Görev bulunamadı veya veriler yükleniyor...
+          </td>
+        </tr>
+
+        <tr *ngFor="let task of tasks">
+          <!-- 1. Görev ve Proje Adı -->
+          <td class="task-info">
+            <div class="task-name">{{ task?.taskName }}</div>
+            <div class="project-name">{{ task?.projectName }}</div>
+          </td>
+
+          <!-- 2. Atamalar (Birden fazla kişi yan yana) -->
+          <td class="assignees-cell">
+            <div class="assignee-badges">
+              <span class="badge assignee" *ngFor="let assignee of task?.assignees || []">
+                <!-- İsmin sadece ilk kelimesini alıyoruz ki tasarım hap şeklinde şık dursun -->
+                {{ (assignee?.employeeName || '').split(' ')[0] }} · {{ assignee?.assignedHours }}sa
+              </span>
+            </div>
+          </td>
+
+          <!-- 3. Durum Rozeti -->
+          <td>
+            <span class="badge status" [ngClass]="getStatusClass(task?.taskStatus || '')">
+              {{ task?.taskStatus }}
+            </span>
+          </td>
+          
+          <!-- 4. Tarihler -->
+          <td class="date-cell">
+            <div>{{ task?.startDate | date:'d MMM yyyy' }}</div>
+            <div>{{ task?.endDate | date:'d MMM yyyy' }}</div>
+          </td>
+            
+          <td class="progress-cell">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" [style.width.%]="task?.progressPercentage || 0"></div>
+            </div>
+            <div class="progress-text">
+              {{ task?.totalCompletedHours || 0 }}/{{ task?.totalAssignedHours || 0 }} sa · %{{ task?.progressPercentage || 0 }}
+            </div>
+          </td>
+
+          <td class="action-cell">
+           <button class="btn-manage" (click)="openManageModal(task)"> Yönet </button>
+           <button class="btn-delete" (click)="deleteTask(task.taskId)">Sil </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<div class="modal-overlay" *ngIf="isManageModalOpen && selectedManageTask">
+  <div class="modal-content" style="max-width: 600px; min-height: 550px; display: flex; flex-direction: column;">
+    
+    <!-- Üst Başlık (Senin Yeni Görev modalınla aynı stil) -->
+    <div class="modal-header">
+      <h2>Görev: {{ selectedManageTask.taskName }}</h2>
+      <button class="close-btn" (click)="closeManageModal()">✕</button>
+    </div>
+
+    <!-- Gövde -->
+    <div class="modal-body" style="flex: 1;">
+      <p style="color: gray; font-size: 13.5px; margin-top: -10px; margin-bottom: 10px;">
+        {{ selectedManageTask.projectName }} • {{ selectedManageTask.startDate | date:'dd MMM yyyy' }} - {{ selectedManageTask.endDate | date:'dd MMM yyyy' }}
+      </p>
+
+      <!-- MEVCUT ATAMALAR LİSTESİ -->
+      <div class="assignment-section">
+        <label class="section-title">ATAMALAR VE İLERLEME</label>
+        
+        <div *ngIf="!selectedManageTask.assignees || selectedManageTask.assignees.length === 0" style="color: gray; font-size: 13.5px; padding: 10px 0;">
+          Bu göreve henüz atanmış bir personel bulunmuyor.
+        </div>
+
+        <!-- Atanan Kişiler Döngüsü -->
+        <div *ngFor="let assignment of selectedManageTask.assignees" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0;">
+          
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <!-- Daire İçi Baş Harfler -->
+            <div style="background-color: #4f46e5; color: white; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+              {{ getInitials(assignment.employeeName) }}
+            </div>
+            <div>
+              <div style="font-weight: 600; color: #333; margin-bottom: 2px;">{{ assignment.employeeName }}</div>
+              <div style="font-size: 12.5px; color: gray;">Atanan: {{ assignment.assignedHours }} sa • Tamamlanan: {{ assignment.completedHours || 0 }} sa</div>
+            </div>
+          </div>
+
+          <!-- İşlem Butonları (Kaydet ve Sil) -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="number" style="width: 70px; padding: 6px; border: 1px solid #ddd; border-radius: 6px; text-align: center; outline: none;" [(ngModel)]="assignment.assignedHours">
+            <button style="padding: 6px 12px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer; color: #444;" (click)="updateAssignedHours(assignment)">Kaydet</button>
+            <button style="padding: 6px 12px; border: none; background: #fee2e2; color: #dc2626; border-radius: 6px; cursor: pointer; font-weight: bold;" (click)="removeTaskAssignment(assignment.id)">X</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" style="margin: 20px 0;">
+
+      <!-- YENİ PERSONEL ATAMA ALANI -->
+      <div class="assignment-section" style="background-color: #f8f9fa; padding: 20px; border-radius: 10px;">
+        <label class="section-title">GÖREVE PERSONEL ATA</label>
+        
+        <div class="assignment-controls" style="margin-top: 10px;">
+          <select class="form-control" [(ngModel)]="newManageAssignment.employeeId">
+            <option [ngValue]="0" disabled selected>Personel Seç</option>
+            <option *ngFor="let emp of employees" [ngValue]="emp.id">{{ emp.fullName }}</option>
+          </select>
+          
+          <input type="number" class="hours-input" placeholder="Saat" [(ngModel)]="newManageAssignment.assignedHours" style="width: 90px;">
+          
+          <button class="btn-add-assign" (click)="addNewTaskAssignment()">+ Ata</button>
+        </div>
+        <p class="hint-text">Tüm personeller arasından seçim yapabilirsiniz.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+  <div class="modal-overlay" *ngIf="isNewTaskModalOpen">
+  <div class="modal-content">
+    
+    <!-- Üst Başlık -->
+    <div class="modal-header">
+      <h2>Yeni Görev</h2>
+      <button class="close-btn" (click)="closeNewTaskModal()">✕</button>
+    </div>
+
+    <!-- Gövde -->
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Görev Adı</label>
+        <input type="text" [(ngModel)]="newTaskPayload.taskName" placeholder="Örn: API dokümantasyonu">
+      </div>
+
+      <div class="form-group">
+        <label>Proje</label>
+   <select [(ngModel)]="newTaskPayload.projectId" name="projectId" class="form-control">
+  <option [ngValue]="0" disabled>Proje Seçin</option>
+ 
+ <option *ngFor="let p of projects" [ngValue]="p.id">{{ p.projectName }}</option>
+</select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label>Başlangıç Tarihi</label>
+          <input type="date" [(ngModel)]="newTaskPayload.startDate">
+        </div>
+        <div class="form-group half">
+          <label>Bitiş Tarihi</label>
+          <input type="date" [(ngModel)]="newTaskPayload.endDate">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Durum</label>
+        <select [(ngModel)]="newTaskPayload.taskStatus">
+          <option value="Başlamadı">Başlamadı</option>
+          <option value="Devam Ediyor">Devam Ediyor</option>
+          <option value="Beklemede">Beklemede</option>
+          <option value="Tamamlandı">Tamamlandı</option>
+        </select>
+      </div>
+
+      <hr class="divider">
+
+  <div class="assignment-section">
+  <label class="section-title">GÖREVE PERSONEL ATA</label>
+  
+  <div class="assignment-controls">
+    <select [(ngModel)]="tempAssignment.employeeId" class="form-control">
+      <option [ngValue]="0" disabled>Personel Seç</option>
+      <!-- e.id ve e.name kısımlarını konsolda gördüğün değerlerle değiştir -->
+      <option *ngFor="let e of employees" [ngValue]="e.id">{{ e.fullName }}</option>
+    </select>
+    
+  
+    <input 
+      type="number" 
+      class="hours-input" 
+      placeholder="Saat" 
+      [(ngModel)]="tempAssignment.assignedHours"
+      min="1" 
+      onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+    
+    <button class="btn-add-assign" (click)="addAssignment()">+ Ata</button>
+  </div>
+  <p class="hint-text">Tüm personeller arasından seçim yapabilirsiniz.</p>
+
+      <div class="assigned-tags" *ngIf="newTaskPayload.assignments.length > 0">
+  <div class="assign-tag" *ngFor="let a of newTaskPayload.assignments; let i = index">
+    {{ a.fullName }} ({{ a.assignedHours }} sa)
+            <span class="remove-tag" (click)="removeAssignment(i)">x</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alt Butonlar -->
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeNewTaskModal()">Vazgeç</button>
+      <button class="btn-submit" (click)="submitTask()">Görevi Oluştur</button>
+    </div>
+
+  </div>
+  </div>
+
+</div>

@@ -1,57 +1,53 @@
-<div class="sidebar">
+<aside class="sidebar">
+  <div class="sidebar-header">
 
-    <a
-        routerLink="/dashboard"
-        routerLinkActive="active"
-        class="menu-item">
+    <div class="logo-info">
+      <h3>Resource Management System</h3>
 
-         Dashboard
+    </div>
+  </div>
 
-    </a>
+ <nav class="sidebar-menu">
+  <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+    <i class="fa-solid fa-border-all"></i>
+    <span>Panel</span>
+  </a>
+  
+  <a routerLink="/projects" routerLinkActive="active" class="menu-item">
+    <i class="fa-solid fa-folder"></i>
+    <span>Projeler</span>
+  </a>
+  
+  <!-- Sizin rotalarınızda henüz tasks yok, birazdan ekleyeceğiz -->
+  <a routerLink="/tasks" routerLinkActive="active" class="menu-item">
+    <i class="fa-regular fa-square-check"></i>
+    <span>Görev & Atama</span>
+  </a>
+  
+  <!-- capacity yerine sizin rotalarınızdaki employees kullanıldı -->
+  <a routerLink="/employees" routerLinkActive="active" class="menu-item">
+    <i class="fa-solid fa-users"></i>
+    <span>Ekip Kapasitesi</span>
+  </a>
+  
+  <!-- leaves yerine sizin rotalarınızdaki leave-request kullanıldı -->
+  <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
+    <i class="fa-solid fa-plane"></i>
+    <span>İzin Onayları</span>
+  </a>
+  
+  <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
+    <i class="fa-regular fa-calendar"></i>
+    <span>Takvim</span>
+  </a>
+  </nav>
 
-    <a
-        routerLink="/employees"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Employees
-
-    </a>
-
-    <a
-        routerLink="/projects"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Projects
-
-    </a>
-
-    <a
-        routerLink="/calendar"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Calendar
-
-    </a>
-
-    <a
-        routerLink="/leave-request"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Leave Requests
-
-    </a>
-
-    <a
-        routerLink="/settings"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Settings
-
-    </a>
-
-</div>
+ 
+  <div class="sidebar-footer">
+    <div class="avatar">DK</div>
+    <div class="user-details">
+      <span class="name">Deniz Koç</span>
+      <span class="role">Proje Yöneticisi</span>
+    </div>
+  </div>
+</aside>

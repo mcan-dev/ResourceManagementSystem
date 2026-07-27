@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common'; // 1. Ekleme: Bunu içeri aktarıyoruz
+import { PageHeaderService } from '../../services/page-header';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [AsyncPipe],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {
 
-  constructor(private router: Router) {}
+  constructor(public pageHeaderService: PageHeaderService,
+     private router: Router) {}
 
   logout() {
     this.router.navigate(['/login']);

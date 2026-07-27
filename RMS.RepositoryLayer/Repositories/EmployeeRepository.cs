@@ -19,16 +19,16 @@ namespace RMS.RepositoryLayer.Repositories
         public async Task<IEnumerable<Employee>> GetAllEmployeesWithDetailsAsync()
         {
             return await _context.Employees
-                .Include(e => e.Team)
-                .Include(e => e.Title)
+                .Include(e => e.TeamId)
+                .Include(e => e.TitleId)
                 .ToListAsync();
         }
 
         public async Task<Employee> GetEmployeeWithDetailsByIdAsync(int id)
         {
             return await _context.Employees
-                .Include(e => e.Team)
-                .Include(e => e.Title)
+                .Include(e => e.TeamId)
+                .Include(e => e.TitleId)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 

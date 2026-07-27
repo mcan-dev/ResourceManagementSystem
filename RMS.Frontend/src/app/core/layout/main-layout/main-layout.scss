@@ -1,15 +1,35 @@
-.layout{
-
-    display:flex;
-
+/* Ana taşıyıcı: Ekranı tamamen kaplar ve içindekileri YAN YANA dizer */
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
-.content{
+/* Sidebar: Kendi genişliğinde sabit kalır ve sıkışmaz */
+app-sidebar {
+  flex-shrink: 0;
+  height: 100vh;
+  /* Genişliği sidebar bileşeninizin içinden geliyorsa buraya width yazmanıza gerek yok */
+}
 
-    flex:1;
+/* Sağ Bölüm: Kalan tüm boşluğu kaplar ve içindekileri ALT ALTA dizer */
+.right-side {
+  display: flex;
+  flex-direction: column; /* Navbar ve İçeriği alt alta dizer */
+  flex: 1; /* Kalan tüm genişliği doldurur */
+  overflow: hidden;
+}
 
-    padding:30px;
+/* Navbar: Yüksekliğini korur, daralmaz */
+app-navbar {
+  flex-shrink: 0; 
+}
 
-    background:#f5f7fb;
-
+/* İçerik Alanı (Projeler vs.): Kalan dikey boşluğu doldurur ve taşarsa kaydırma çubuğu çıkarır */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px; /* Kartların kenarlara yapışmaması için boşluk */
+  background-color: #f8fafc; /* Arka plan renginiz */
 }

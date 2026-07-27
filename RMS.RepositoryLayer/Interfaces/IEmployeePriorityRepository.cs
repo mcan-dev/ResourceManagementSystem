@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RMS.RepositoryLayer.Interfaces
 {
-    public interface IEmployeePriorityRepository : IGenericRepository<Employee>
+    public interface IEmployeePriorityRepository : IGenericRepository<EmployeePriority>
     {
     }
 }

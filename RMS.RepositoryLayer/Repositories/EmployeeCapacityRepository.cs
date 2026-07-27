@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RMS.RepositoryLayer.Repositories
 {
-    internal class EmployeeCapacityRepository : GenericRepository<EmployeeCapacity>, IEmployeeCapacityRepository
+    public class EmployeeCapacityRepository : GenericRepository<EmployeeCapacity>, IEmployeeCapacityRepository
     {
         public EmployeeCapacityRepository(RmsContext context) : base(context)
         {

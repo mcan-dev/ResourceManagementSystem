@@ -21,6 +21,8 @@ public partial class Project
 
     public DateTime UpdatedAt { get; set; }
 
+    public string? ProjectDescription { get; set; }
+
     public virtual ICollection<EmployeeCapacity> EmployeeCapacities { get; set; } = new List<EmployeeCapacity>();
 
     public virtual Priority? Priority { get; set; }

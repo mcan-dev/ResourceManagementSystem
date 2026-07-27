@@ -3,10 +3,13 @@ using RMS.DataLayer.RmsDb;
 using RMS.RepositoryLayer.Interfaces;
 using RMS.RepositoryLayer.Repositories;
 using RMS.RepositoryLayer.Repositories.RMS.RepositoryLayer.Repositories;
+using RMS.ServiceLayer.Interfaces;
+using RMS.ServiceLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -21,6 +24,12 @@ builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
 builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
 builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
 builder.Services.AddScoped<ILeaveStatusRepository, LeaveStatusRepository>();
+builder.Services.AddScoped<IProjectStatusRepository, ProjectStatusRepository>();
+builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
+builder.Services.AddScoped<IEmployeePriorityRepository, EmployeePriorityRepository>();
+builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
+builder.Services.AddScoped<ITaskAssignmentService, TaskAssignmentService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddDbContext<RmsContext>(options =>
 
 {
@@ -41,7 +50,7 @@ Console.WriteLine("Connection String:");
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

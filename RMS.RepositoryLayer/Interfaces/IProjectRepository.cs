@@ -1,4 +1,5 @@
 ﻿using RMS.DataLayer.Entities;
+using RMS.RepositoryLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,8 @@ namespace RMS.RepositoryLayer.Interfaces
     {
         Task<IEnumerable<Project>> GetAllProjectsWithDetailsAsync();
         Task<IEnumerable<Project>> GetProjectsByStatusAsync(int statusId);
+        Task<Project?> GetProjectWithDetailsAsync(int projectId);
+
+
     }
 }

@@ -22,5 +22,16 @@ namespace RMS.RepositoryLayer.Repositories
                 .Where(pt => pt.ProjectId == projectId)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<ProjectTask>> GetAllWithDetailsAsync()
+        {
+            return await _context.ProjectTasks
+                .Include(pt => pt.Project) // Proje adının gelmesi için
+                .Include(pt => pt.TaskAssignments)
+                    .ThenInclude(ta => ta.Employee) // Personel adlarının gelmesi için
+                .Include(pt => pt.TaskAssignments)
+                    .ThenInclude(ta => ta.TaskProgress) // Tamamlanan saatlerin gelmesi için
+                .ToListAsync();
+        }
     }
 }

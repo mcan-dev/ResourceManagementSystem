@@ -1,1 +1,163 @@
-<p>projects works!</p>
+<div class="projects-container">
+  
+  <!-- Üst Başlık Alanı -->
+  <div class="page-header">
+    <p class="page-description">Detay, personel atama ve kapasite tanımı için projeye tıklayın</p>
+    <button class="btn-primary" (click)="openCreateModal()">+ Yeni Proje</button>
+  </div>
+
+  <div class="projects-grid">
+    
+    <div class="project-card" *ngFor="let project of projectList" (click)="goToProjectDetails(project)">
+      
+      <div class="card-actions">
+        <!-- Düzenle Butonu -->
+        <button class="btn-edit" (click)="openEditModal($event, project)" title="Projeyi Düzenle">
+          ✏️
+        </button>
+        <!-- Sil Butonu -->
+        <button class="btn-delete" (click)="deleteProject($event, project.id)" title="Projeyi Sil">
+          <i class="icon-trash">🗑️</i>
+        </button>
+      </div>
+
+      <div class="card-badges">
+        <span class="badge" [ngClass]="getStatusClass(project.statusName)">
+          {{ project.statusName }}
+        </span>
+        <span class="badge" [ngClass]="getPriorityClass(project.priorityName)">
+          {{ project.priorityName }}
+        </span>
+      </div>
+      
+      <div class="card-content">
+        <h3>{{ project.projectName }}</h3>
+        <p>{{ project.projectDescription }}</p>
+      </div>
+
+      <!-- İlerleme Çubuğu -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="project.progressPercentage"></div>
+        </div>
+      </div>
+
+      <!-- Kart Alt Kısmı -->
+      <div class="card-footer">
+        <div class="dates">
+          <span>📅 {{ project.startDate }}</span>
+          <span class="end-date">🏁 {{ project.endDate }}</span>
+        </div>
+        <div class="stats">
+          {{ project.memberCount }} personel • {{ project.taskCount }} görev • %{{ project.progressPercentage }} tamamlandı
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal-overlay" *ngIf="isCreateModalOpen" (click)="closeCreateModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Yeni Proje</h2>
+      <button class="close-btn" (click)="closeCreateModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Proje Adı</label>
+        <input type="text" [(ngModel)]="newProjectData.projectName" placeholder="Örn: E-ticaret Platformu">
+      </div>
+      <div class="form-group">
+        <label>Açıklama</label>
+        <textarea rows="4" [(ngModel)]="newProjectData.projectDescription" placeholder="Proje detaylarını giriniz..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Proje Durumu</label>
+        <select [(ngModel)]="newProjectData.projectStatusId">
+          <option value="1">Başlamadı</option>
+          <option value="2">Planlanıyor</option>
+          <option value="3">Devam Ediyor</option>
+          <option value="4">Beklemede</option>
+          <option value="5">Test Aşamasında</option>
+          <option value="6">Tamamlandı</option>
+          <option value="7">İptal Edildi</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Proje Başlama Tarihi</label>
+          <input type="date" [(ngModel)]="newProjectData.startDate">
+        </div>
+        <div class="form-group">
+          <label>Proje Bitiş Tarihi</label>
+          <input type="date" [(ngModel)]="newProjectData.endDate">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" (click)="closeCreateModal()">Vazgeç</button>
+      <button class="btn-primary" (click)="createNewProject()">Projeyi Oluştur</button>
+    </div>
+   </div>
+</div>
+
+<!-- ==========================================
+     PROJE DÜZENLEME MODALI
+     ========================================== -->
+<div class="modal-overlay" *ngIf="isEditModalOpen" (click)="closeEditModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h2>Projeyi Düzenle</h2>
+      <button class="close-btn" (click)="closeEditModal()">✕</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Proje Adı</label>
+        <input type="text" [(ngModel)]="editProjectData.projectName">
+      </div>
+      <div class="form-group">
+        <label>Açıklama</label>
+        <textarea rows="4" [(ngModel)]="editProjectData.projectDescription"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Proje Durumu</label>
+        <select [(ngModel)]="editProjectData.projectStatusId">
+        <option value="1">Başlamadı</option>
+        <option value="2">Planlanıyor</option>
+        <option value="3">Devam Ediyor</option>
+        <option value="4">Beklemede</option>
+        <option value="5">Test Aşamasında</option>
+        <option value="6">Tamamlandı</option>
+        <option value="7">İptal Edildi</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Proje Başlama Tarihi</label>
+          <input type="date" [(ngModel)]="editProjectData.startDate">
+        </div>
+        <div class="form-group">
+          <label>Proje Bitiş Tarihi</label>
+          <input type="date" [(ngModel)]="editProjectData.endDate">
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-outline" (click)="closeEditModal()">Vazgeç</button>
+      <button class="btn-primary" (click)="saveEditedProject()">Değişiklikleri Kaydet</button>
+    </div>
+    
+  </div>
+</div>
+
+<app-project-detail 
+  *ngIf="isDetailModalOpen" 
+  [projectData]="selectedProject" 
+  (closeModalEvent)="closeDetailModal()">
+</app-project-detail>
