@@ -59,10 +59,19 @@ public partial class RmsContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Employee>(entity =>
+
         {
             entity.HasKey(e => e.Id).HasName("PK__employee__3213E83F2808815B");
 
             entity.ToTable("employees", tb => tb.HasTrigger("trg_employees_Update_UpdatedAt"));
+           /*
+            entity.ToTable("employees", tb =>
+            {
+                tb.HasTrigger("trg_employees_Update_UpdatedAt");
+            });
+*/
+            entity.HasKey(e => e.Id).HasName("PK__employee__3213E83F962105F8");
+
 
             entity.HasIndex(e => e.Email, "uq_employees_email").IsUnique();
 
@@ -175,9 +184,8 @@ public partial class RmsContext : DbContext
             entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
             entity.Property(e => e.EndDate).HasColumnName("end_date");
             entity.Property(e => e.LeaveStatusId).HasColumnName("leave_status_id");
-            entity.Property(e => e.LeaveType)
-                .HasMaxLength(250)
-                .HasColumnName("leave_type");
+            entity.Property(e => e.LeaveTypeId)
+                .HasColumnName("leave_type_id");
             entity.Property(e => e.StartDate).HasColumnName("start_date");
             entity.Property(e => e.TotalDays).HasColumnName("total_days");
             entity.Property(e => e.UpdatedAt)
@@ -188,10 +196,12 @@ public partial class RmsContext : DbContext
                 .HasForeignKey(d => d.EmployeeId)
                 .HasConstraintName("fk_leave_requests_employee_id");
 
-            entity.HasOne(d => d.LeaveStatus).WithMany(p => p.LeaveRequests)
-                .HasForeignKey(d => d.LeaveStatusId)
+            entity.HasOne(d => d.LeaveType)
+                .WithMany(p => p.LeaveRequests)
+                .HasForeignKey(d => d.LeaveTypeId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("fk_leave_requests_leave_status_id");
+                .HasConstraintName("fk_leave_requests_leave_status_id")
+                .HasConstraintName("fK_leave_requests_leave_types"); // Bu sonradan eklendi bozarsa bunu silicez
         });
 
         modelBuilder.Entity<LeaveStatus>(entity =>

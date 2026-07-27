@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     RouterLinkActive],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss',
+  styleUrls: ['./sidebar.scss']
 })
 export class Sidebar implements OnInit{userRole: string = '';
   Role: string = '';

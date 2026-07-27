@@ -15,7 +15,9 @@ public partial class LeaveRequest
 
     public int? TotalDays { get; set; }
 
-    public string? LeaveType { get; set; }
+    public int? LeaveTypeId { get; set; }
+
+    public virtual LeaveType? LeaveType { get; set; }
 
     public int? LeaveStatusId { get; set; }
 

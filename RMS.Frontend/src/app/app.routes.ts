@@ -4,8 +4,9 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { ProjectsComponent } from './features/projects/projects';
 import { Login } from './features/auth/login/login';
 import { Employees } from './features/employees/employees';
-import { Calendar } from './features/calendar/calendar';
-import { LeaveRequest } from './features/leave-request/leave-request';
+import { EmployeeCapacity } from './features/employee-capacity/employee-capacity';
+import { CalendarComponent } from './features/calendar/calendar';
+import { LeaveRequestComponent } from './features/leave-request/leave-request';
 import { Settings } from './features/settings/settings';
 import { Tasks } from './features/tasks/tasks';
 
@@ -32,13 +33,13 @@ export const routes: Routes = [
         component: Dashboard
       },
       {
-        path: 'employees',
-        component: Employees
+        path: 'employee-capacity',
+        component: EmployeeCapacity
       },
     
       {
         path: 'calendar',
-        component: Calendar
+        component: CalendarComponent
       },
       {
       path: 'tasks', // <-- Rota adının sidebar'daki routerLink="/tasks" ile birebir aynı olması gerekir
@@ -46,7 +47,7 @@ export const routes: Routes = [
     },
       {
         path: 'leave-request',
-        component: LeaveRequest
+        component: LeaveRequestComponent
       },
       {
         path: 'settings',

@@ -8,9 +8,13 @@ import { PageHeaderService } from '../../services/page-header';
   standalone: true,
   imports: [AsyncPipe],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.scss',
+  styleUrls: ['./navbar.scss']
 })
 export class Navbar {
+  
+  public pageHeaderService = {
+    title$: new BehaviorSubject<string>('Resource Management System')
+  };
 
   constructor(public pageHeaderService: PageHeaderService,
      private router: Router) {}

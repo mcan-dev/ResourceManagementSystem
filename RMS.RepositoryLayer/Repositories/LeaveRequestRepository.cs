@@ -31,5 +31,31 @@ namespace RMS.RepositoryLayer.Repositories
                 .Include(lr => lr.Employee) 
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<LeaveRequest>> GetMonthlyLeaveRequestsAsync(
+    int year,
+    int month,
+    CancellationToken cancellationToken = default)
+        {
+            return await _context.LeaveRequests
+                .Include(l => l.Employee)
+                .Include(l => l.LeaveStatus)
+                .Where(l =>
+                    (l.StartDate.Year == year && l.StartDate.Month == month) ||
+                    (l.EndDate.Year == year && l.EndDate.Month == month))
+                .ToListAsync(cancellationToken);
+        }
+        public async Task<IReadOnlyList<LeaveRequest>> GetAllForAdminAsync(
+    CancellationToken cancellationToken = default)
+        {
+            return await _context.LeaveRequests
+                .Include(l => l.Employee)
+                    .ThenInclude(e => e.Team)
+                .Include(l => l.LeaveType)
+                .Include(l => l.LeaveStatus)
+                .OrderByDescending(l => l.CreatedAt)
+                .ToListAsync(cancellationToken);
+        }
     }
+
 }

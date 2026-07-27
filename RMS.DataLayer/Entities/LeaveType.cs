@@ -14,4 +14,6 @@ public partial class LeaveType
     public bool IsPaid { get; set; }
 
     public virtual ICollection<LeaveTransaction> LeaveTransactions { get; set; } = new List<LeaveTransaction>();
+    public virtual ICollection<LeaveRequest> LeaveRequests { get; set; }
+    = new List<LeaveRequest>();
 }

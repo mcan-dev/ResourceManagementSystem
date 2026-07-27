@@ -1,13 +1,7 @@
 ﻿using RMS.DataLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RMS.RepositoryLayer.Interfaces
+namespace RMS.RepositoryLayer.Interfaces;
+
+public interface IEmployeePriorityRepository : IGenericRepository<EmployeePriority>
 {
-    public interface IEmployeePriorityRepository : IGenericRepository<EmployeePriority>
-    {
-    }
 }

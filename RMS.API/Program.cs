@@ -4,7 +4,8 @@ using RMS.RepositoryLayer.Interfaces;
 using RMS.RepositoryLayer.Repositories;
 using RMS.RepositoryLayer.Repositories.RMS.RepositoryLayer.Repositories;
 using RMS.ServiceLayer.Interfaces;
-using RMS.ServiceLayer.Services;
+using RMS.ServiceLayer.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,14 @@ builder.Services.AddScoped<IEmployeePriorityRepository, EmployeePriorityReposito
 builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
 builder.Services.AddScoped<ITaskAssignmentService, TaskAssignmentService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeCapacityRepository, EmployeeCapacityRepository>();
+builder.Services.AddScoped<IWorkCalendarRepository, WorkCalendarRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddScoped<IEmployeeCapacityService, EmployeeCapacityService>();
+builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddDbContext<RmsContext>(options =>
+
 
 {
     options.UseSqlServer(
@@ -48,6 +56,21 @@ builder.Services.AddCors(options =>
 });
 Console.WriteLine("Connection String:");
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+// Program.cs i�erisine ekle (builder.Build() sat�r�ndan �nce)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Angular'�n adresi
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
+
 var app = builder.Build();
 
 
@@ -83,6 +106,8 @@ app.UseCors("AllowAngular");
 app.UseAuthorization();
 
 app.MapControllers();
+// app.Run() sat�r�ndan �nce middleware'i �a��r
+app.UseCors("AllowAngular");
 
 app.Run();
 

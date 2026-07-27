@@ -1,1 +1,78 @@
-<p>leave-request works!</p>
+<div class="custom-table-container">
+  
+  <div class="loading-shade" *ngIf="isLoading$ | async">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <table mat-table [dataSource]="(leaveRequests$ | async) || []" class="custom-leave-table">
+
+    <!-- PERSONEL Kolonu -->
+    <ng-container matColumnDef="employeeName">
+      <th mat-header-cell *matHeaderCellDef> PERSONEL </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="employee-cell">
+          <div class="avatar">{{ getInitials(element.employeeName) }}</div>
+          <div class="emp-details">
+            <span class="name">{{ element.employeeName }}</span>
+            <span class="dept">{{ element.teamName }}</span>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+<!-- İZİN TÜRÜ Kolonu -->
+    <ng-container matColumnDef="leaveTypeName">
+      <th mat-header-cell *matHeaderCellDef> İZİN TÜRÜ </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="leave-type-cell">
+          <span class="type-name">{{ element.leaveTypeName }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- TARİH Kolonu -->
+<!-- TARİH Kolonu -->
+    <ng-container matColumnDef="dateRange">
+      <th mat-header-cell *matHeaderCellDef> TARİH </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="date-cell">
+          <span class="date-range">{{ element.startDate | date:'d MMM yyyy' }} – {{ element.endDate | date:'d MMM yyyy' }}</span>
+          <span class="days">{{ element.totalDays }} gün</span>
+        </div>
+      </td>
+    </ng-container>
+
+
+    <!-- DURUM Kolonu -->
+    <ng-container matColumnDef="statusName">
+      <th mat-header-cell *matHeaderCellDef> DURUM </th>
+      <td mat-cell *matCellDef="let element">
+        <span class="status-badge" 
+              [ngClass]="{
+                'status-pending': element.statusId === 1,
+                'status-approved': element.statusId === 2,
+                'status-rejected': element.statusId === 3
+              }">
+          {{ element.statusName }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- DEĞERLENDİRME Kolonu -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> DEĞERLENDİRME </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="action-buttons" *ngIf="element.statusId === 1; else noAction">
+          <button class="btn btn-approve" (click)="approveRequest(element.id)">✓ Onayla</button>
+          <button class="btn btn-reject" (click)="rejectRequest(element.id)">✕ Reddet</button>
+        </div>
+        <ng-template #noAction>
+          <span class="no-action">—</span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

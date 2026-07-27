@@ -17,5 +17,6 @@ namespace RMS.RepositoryLayer.Interfaces
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
         void Update(T entity);
         void Delete(T entity);
+
     }
 }

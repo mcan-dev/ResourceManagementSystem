@@ -23,5 +23,5 @@ export class AuthService {
     `${this.apiUrl}/login`,
     data
   );
-  }
+}
 }

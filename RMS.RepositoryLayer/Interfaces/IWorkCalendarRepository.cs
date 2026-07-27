@@ -10,5 +10,9 @@ namespace RMS.RepositoryLayer.Interfaces
 {
     public interface IWorkCalendarRepository : IGenericRepository<WorkCalendar>
     {
+        Task<IReadOnlyList<WorkCalendar>> GetMonthlyCalendarAsync(
+    int year,
+    int month,
+    CancellationToken cancellationToken = default);
     }
 }
