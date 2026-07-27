@@ -67,22 +67,19 @@ namespace RMS.API.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTaskAssignment(int id, [FromBody] UpdateTaskAssignmentDto dto)
+        [HttpPut("update-progress")]
+        public async Task<IActionResult> UpdateEmployeeProgress([FromBody] UpdateEmployeeProgressDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            // Gelen verinin doğruluğunu kontrol et
+            if (dto.CompletedHours < 0)
+                return BadRequest("Tamamlanan saat 0'dan küçük olamaz.");
 
-            
-            if (id != dto.Id)
-                return BadRequest(new { Message = "URL ID değeri ile güncellenmek istenen kaydın ID değeri uyuşmuyor." });
+            var success = await _taskService.UpdateCompletedHoursAsync(dto);
 
-            bool isSuccess = await _taskService.UpdateAsync(dto);
+            if (!success)
+                return NotFound("İlgili görev veya personel ataması bulunamadı.");
 
-            if (isSuccess)
-                return Ok(new { Message = "Görev ataması başarıyla güncellendi." });
-
-            return NotFound(new { Message = "Güncellenecek atama bulunamadı veya çakışma (conflict) oluştu." });
+            return Ok(new { message = "İlerleme başarıyla güncellendi." });
         }
 
         [HttpDelete("{id}")]

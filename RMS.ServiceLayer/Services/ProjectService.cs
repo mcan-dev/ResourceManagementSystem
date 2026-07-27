@@ -22,59 +22,68 @@ namespace RMS.ServiceLayer.Services
         }
         public async Task<List<ProjectCardListDto>> GetProjectCardsAsync()
         {
-
             var projects = await _projectRepository.GetAllProjectsWithDetailsAsync();
 
             var bugun = DateOnly.FromDateTime(DateTime.Now);
 
-            var projectCards = projects.Select(p => new ProjectCardListDto
+            var projectCards = projects.Select(p =>
             {
+                // --- YENİ EKLENEN KISIM: Görevlerdeki saatleri baştan topluyoruz ---
+                var allAssignments = p.ProjectTasks != null
+                    ? p.ProjectTasks.SelectMany(t => t.TaskAssignments ?? new List<TaskAssignment>()).ToList()
+                    : new List<TaskAssignment>();
 
+                decimal totalAssigned = allAssignments.Sum(a => a.AssignedHours != null ? Convert.ToDecimal(a.AssignedHours) : 0);
+                decimal totalCompleted = allAssignments.Sum(a => a.CompletedHours != null ? Convert.ToDecimal(a.CompletedHours) : 0);
+                // -------------------------------------------------------------------
 
-                Id = p.Id,
-                ProjectName = p.ProjectName,
-                ProjectDescription = p.ProjectDescription,
-                StartDate = p.StartDate,
-                EndDate = p.EndDate,
+                return new ProjectCardListDto
+                {
+                    Id = p.Id,
+                    ProjectName = p.ProjectName,
+                    ProjectDescription = p.ProjectDescription,
+                    StartDate = p.StartDate,
+                    EndDate = p.EndDate,
 
+                    StatusName = p.ProjectStatusId == 1 ? "Başlamadı" :
+                                 p.ProjectStatusId == 2 ? "Planlanıyor" :
+                                 p.ProjectStatusId == 3 ? "Devam Ediyor" :
+                                 p.ProjectStatusId == 4 ? "Beklemede" :
+                                 p.ProjectStatusId == 5 ? "Test Aşamasında" :
+                                 p.ProjectStatusId == 6 ? "Tamamlandı" :
+                                 p.ProjectStatusId == 7 ? "İptal Edildi" : "Belirtilmedi",
 
+                    PriorityId = p.EndDate.HasValue
+                                 ? (p.EndDate.Value.DayNumber < bugun.DayNumber ? 5
+                                  : p.EndDate.Value.DayNumber - bugun.DayNumber <= 3 ? 4
+                                  : p.EndDate.Value.DayNumber - bugun.DayNumber <= 7 ? 3
+                                  : p.EndDate.Value.DayNumber - bugun.DayNumber <= 14 ? 2
+                                  : 1)
+                                 : 0,
 
-                StatusName = p.ProjectStatusId == 1 ? "Başlamadı" :
-             p.ProjectStatusId == 2 ? "Planlanıyor" :
-             p.ProjectStatusId == 3 ? "Devam Ediyor" :
-             p.ProjectStatusId == 4 ? "Beklemede" :
-             p.ProjectStatusId == 5 ? "Test Aşamasında" :
-             p.ProjectStatusId == 6 ? "Tamamlandı" :
-             p.ProjectStatusId == 7 ? "İptal Edildi" : "Belirtilmedi",
+                    PriorityName = p.EndDate.HasValue
+                                   ? (p.EndDate.Value.DayNumber < bugun.DayNumber ? "Bitti"
+                                    : p.EndDate.Value.DayNumber - bugun.DayNumber <= 3 ? "Kritik Öncelik"
+                                    : p.EndDate.Value.DayNumber - bugun.DayNumber <= 7 ? "Yüksek Öncelik"
+                                    : p.EndDate.Value.DayNumber - bugun.DayNumber <= 14 ? "Orta Öncelik"
+                                    : "Düşük Öncelik")
+                                   : "Belirtilmedi",
 
-                PriorityId = p.EndDate.HasValue
-            ? (p.EndDate.Value.DayNumber < bugun.DayNumber ? 5      
-             : p.EndDate.Value.DayNumber - bugun.DayNumber <= 3 ? 4
-             : p.EndDate.Value.DayNumber - bugun.DayNumber <= 7 ? 3 
-             : p.EndDate.Value.DayNumber - bugun.DayNumber <= 14 ? 2
-             : 1)                                                   
-            : 0,                                                   
+                    TaskCount = p.ProjectTasks?.Count ?? 0,
 
-                PriorityName = p.EndDate.HasValue
-                 ? (p.EndDate.Value.DayNumber < bugun.DayNumber ? "Bitti"
-                 : p.EndDate.Value.DayNumber - bugun.DayNumber <= 3 ? "Kritik Öncelik"
-                  : p.EndDate.Value.DayNumber - bugun.DayNumber <= 7 ? "Yüksek Öncelik"
-                     : p.EndDate.Value.DayNumber - bugun.DayNumber <= 14 ? "Orta Öncelik"
-                      : "Düşük Öncelik")
-                        : "Belirtilmedi",
+                    MemberCount = p.ProjectTasks != null
+                                  ? p.ProjectTasks.SelectMany(t => t.TaskAssignments)
+                                                  .Select(ta => ta.EmployeeId)
+                                                  .Distinct()
+                                                  .Count()
+                                  : 0,
 
-                TaskCount = p.ProjectTasks?.Count ?? 0,
-
-                MemberCount = p.ProjectTasks != null
-            ? p.ProjectTasks.SelectMany(t => t.TaskAssignments)
-                            .Select(ta => ta.EmployeeId)
-                            .Distinct()
-                            .Count()
-            : 0,
-                ProgressPercentage = (p.ProjectTasks != null && p.ProjectTasks.Any())
-            ? (int)Math.Round((double)p.ProjectTasks.Count(t => t.TaskStatus == "Tamamlandı") / p.ProjectTasks.Count * 100, 0)
-            : 0
+                    ProgressPercentage = totalAssigned > 0
+                                         ? (int)Math.Round((double)(totalCompleted / totalAssigned) * 100, 0)
+                                         : 0
+                };
             }).ToList();
+
             return projectCards;
         }
 
@@ -89,7 +98,8 @@ namespace RMS.ServiceLayer.Services
             var taskList = project.ProjectTasks?.Select(t =>
             {
                 var assignment = t.TaskAssignments?.FirstOrDefault();
-                var progress = assignment?.TaskProgress;
+                decimal assignedHrs = assignment?.AssignedHours != null ? Convert.ToDecimal(assignment.AssignedHours) : 0;
+                decimal completedHrs = assignment?.CompletedHours != null ? Convert.ToDecimal(assignment.CompletedHours) : 0;
 
                 return new ProjectTaskDetailDto
                 {
@@ -105,15 +115,13 @@ namespace RMS.ServiceLayer.Services
                         ? assignment.Employee.Title.TitleName
                         : "-",
 
-                    AssignedHours = assignment != null ? assignment.AssignedHours : 0,
+                    AssignedHours = assignedHrs,
+                    TotalHours = assignedHrs, 
+                    CompletedHours = completedHrs,
 
-                    TotalHours = progress != null ? progress.TotalHours : 0,
-
-                    CompletedHours = progress != null ? progress.CompletedHours : 0,
-
-                    ProgressPercentage = (progress != null && progress.TotalHours > 0)
-                        ? Math.Round((double)(progress.CompletedHours / progress.TotalHours) * 100, 0)
-                        : 0
+                    ProgressPercentage = assignedHrs > 0
+                ? Math.Round((double)(completedHrs / assignedHrs) * 100, 0)
+                : 0
                 };
             }).ToList() ?? new List<ProjectTaskDetailDto>();
 

@@ -14,10 +14,10 @@ namespace RMS.ServiceLayer.Interfaces
 
         Task<List<ManagerTaskListDto>> GetAllManagerTasksAsync();
         Task<bool> CreateTaskWithAssignmentsAsync(CreateTaskWithAssignmentsDto dto);
-        Task<bool> UpdateAsync(UpdateTaskAssignmentDto updateDto);
         Task<bool> DeleteTaskAsync(int taskId);
         Task AddSingleAssignmentAsync(AddAssignmentDto dto);
         Task UpdateAssignmentHoursAsync(int id, int newHours);
+        Task<bool> UpdateCompletedHoursAsync(UpdateEmployeeProgressDto dto);
         Task<bool> DeleteSingleAssignmentAsync(int id);
     }
 }

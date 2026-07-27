@@ -1,53 +1,81 @@
 <aside class="sidebar">
   <div class="sidebar-header">
-
     <div class="logo-info">
       <h3>Resource Management System</h3>
-
     </div>
   </div>
 
- <nav class="sidebar-menu">
-  <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
-    <i class="fa-solid fa-border-all"></i>
-    <span>Panel</span>
-  </a>
-  
-  <a routerLink="/projects" routerLinkActive="active" class="menu-item">
-    <i class="fa-solid fa-folder"></i>
-    <span>Projeler</span>
-  </a>
-  
-  <!-- Sizin rotalarınızda henüz tasks yok, birazdan ekleyeceğiz -->
-  <a routerLink="/tasks" routerLinkActive="active" class="menu-item">
-    <i class="fa-regular fa-square-check"></i>
-    <span>Görev & Atama</span>
-  </a>
-  
-  <!-- capacity yerine sizin rotalarınızdaki employees kullanıldı -->
-  <a routerLink="/employees" routerLinkActive="active" class="menu-item">
-    <i class="fa-solid fa-users"></i>
-    <span>Ekip Kapasitesi</span>
-  </a>
-  
-  <!-- leaves yerine sizin rotalarınızdaki leave-request kullanıldı -->
-  <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
-    <i class="fa-solid fa-plane"></i>
-    <span>İzin Onayları</span>
-  </a>
-  
-  <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
-    <i class="fa-regular fa-calendar"></i>
-    <span>Takvim</span>
-  </a>
+  <nav class="sidebar-menu">
+    
+    <!-- ========================================== -->
+    <!-- YÖNETİCİ MENÜSÜ                            -->
+    <!-- ========================================== -->
+    <ng-container *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'">
+      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+        <i class="fa-solid fa-border-all"></i>
+        <span>Panel</span>
+      </a>
+      
+      <a routerLink="/projects" routerLinkActive="active" class="menu-item">
+        <i class="fa-solid fa-folder"></i>
+        <span>Projeler</span>
+      </a>
+      
+      <a routerLink="/tasks" routerLinkActive="active" class="menu-item">
+        <i class="fa-regular fa-square-check"></i>
+        <span>Görev & Atama</span>
+      </a>
+      
+      <a routerLink="/employees" routerLinkActive="active" class="menu-item">
+        <i class="fa-solid fa-users"></i>
+        <span>Ekip Kapasitesi</span>
+      </a>
+      
+      <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
+        <i class="fa-solid fa-plane"></i>
+        <span>İzin Onayları</span>
+      </a>
+      
+      <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
+        <i class="fa-regular fa-calendar"></i>
+        <span>Takvim</span>
+      </a>
+    </ng-container>
+
+    <!-- ========================================== -->
+    <!-- PERSONEL MENÜSÜ                            -->
+    <!-- ========================================== -->
+    <ng-container *ngIf="userRole === 'Personel'|| userRole === 'Çalışan'">
+      <!-- Personel için rotaları kendi yapılandırmanıza göre güncelleyebilirsiniz -->
+      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+        <i class="fa-solid fa-border-all"></i>
+        <span>Panel</span>
+      </a>
+      
+      <a routerLink="/tasks" routerLinkActive="active" class="menu-item">
+        <i class="fa-regular fa-square-check"></i>
+        <span>Görevlerim</span>
+      </a>
+      
+      <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
+        <i class="fa-solid fa-plane"></i>
+        <span>İzinlerim</span>
+      </a>
+      
+      <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
+        <i class="fa-regular fa-calendar"></i>
+        <span>Takvim</span>
+      </a>
+    </ng-container>
+
   </nav>
 
- 
+  <!-- Dinamik Kullanıcı Bilgileri -->
   <div class="sidebar-footer">
-    <div class="avatar">DK</div>
+    <div class="avatar">{{ userInitials }}</div>
     <div class="user-details">
-      <span class="name">Deniz Koç</span>
-      <span class="role">Proje Yöneticisi</span>
+      <span class="name">{{ userName }}</span>
+      <span class="role">{{ userRole }}</span>
     </div>
   </div>
 </aside>

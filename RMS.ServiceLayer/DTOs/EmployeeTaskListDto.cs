@@ -25,5 +25,11 @@ namespace RMS.ServiceLayer.DTOs
             : 0;
     }
 
+    public class UpdateEmployeeProgressDto
+    {
+        public int TaskId { get; set; }
+        public int EmployeeId { get; set; }
+        public int CompletedHours { get; set; }
+    }
 
 }

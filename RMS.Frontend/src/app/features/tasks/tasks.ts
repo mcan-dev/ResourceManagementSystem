@@ -15,6 +15,12 @@ import { ProjectService } from '../../core/services/project-service';
 export class Tasks implements OnInit {
   
   tasks: any[] = []; 
+  userRole: string = ''; 
+  
+  // --- YENİ EKLENEN DEĞİŞKENLER (Çalışan Ekranı İçin) ---
+  userName: string = ''; 
+  newCompletedHours: number | null = null; 
+
   isNewTaskModalOpen: boolean = false;
 
   projects: any[] = [];
@@ -49,8 +55,21 @@ export class Tasks implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadManagerTasks();
+    // KULLANICI ROLÜNÜ, İSMİNİ VE ID'SİNİ YAKALIYORUZ
+    this.userRole = localStorage.getItem('userRole') || '';
+    this.userName = localStorage.getItem('userName') || localStorage.getItem('fullName') || 'Bilinmeyen Kullanıcı'; // İsmi güvenli şekilde aldık
+    
+    const userIdStr = localStorage.getItem('userId');
+    const userId = userIdStr ? Number(userIdStr) : 0;
+
     this.loadDropdownData();
+
+    // ROLE GÖRE VERİ ÇEKME İŞLEMİ
+    if (this.userRole === 'Sistem Yöneticisi' || this.userRole === 'Proje Yöneticisi') {
+      this.loadManagerTasks();
+    } else {
+      this.loadEmployeeTasks(userId);
+    }
   }
 
   loadDropdownData() {
@@ -76,14 +95,33 @@ export class Tasks implements OnInit {
   loadManagerTasks(): void {
     this.taskService.getAllManagerTasks().subscribe({
       next: (data: any) => {
-        console.log('Gelen Görev Verisi:', data);
+        console.log('Gelen Yönetici Görev Verisi:', data);
         this.tasks = data;
         this.cdr.detectChanges();
       },
       error: (err: any) => {
-        console.error('Görevler yüklenirken hata:', err);
+        console.error('Yönetici görevleri yüklenirken hata:', err);
       }
     }); 
+  }
+
+  // ÇALIŞANLARA ÖZEL GÖREV GETİRME METODU EKLENDİ
+  loadEmployeeTasks(employeeId: number): void {
+    if (employeeId === 0) {
+      console.error('Geçersiz Personel ID. Giriş yapılmamış olabilir.');
+      return;
+    }
+
+    this.taskService.getTasksByEmployeeId(employeeId).subscribe({
+      next: (data: any) => {
+        console.log('Gelen Personel Görev Verisi:', data);
+        this.tasks = data;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Personel görevleri yüklenirken hata:', err);
+      }
+    });
   }
 
   resetForm() {
@@ -134,7 +172,14 @@ export class Tasks implements OnInit {
       next: (response: any) => {
         console.log('Başarıyla kaydedildi!', response);
         this.closeNewTaskModal(); 
-        this.loadManagerTasks();  
+        
+        // Kayıt sonrası güncel veriyi çekerken de rol kontrolü yapıyoruz
+        if (this.userRole === 'Sistem Yöneticisi' || this.userRole === 'Proje Yöneticisi') {
+          this.loadManagerTasks();  
+        } else {
+          const userIdStr = localStorage.getItem('userId');
+          if(userIdStr) this.loadEmployeeTasks(Number(userIdStr));
+        }
       },
       error: (err: any) => {
         console.error('Kayıt hatası:', err);
@@ -144,7 +189,6 @@ export class Tasks implements OnInit {
   }
 
   // --- GÖREV SİLME (TÜM GÖREVİ) ---
-
   deleteTask(taskId: number) {
     if (!taskId) {
       console.error('HATA: taskId boş veya undefined geldi!');
@@ -157,7 +201,7 @@ export class Tasks implements OnInit {
       this.taskService.deleteTask(taskId).subscribe({
         next: (res) => {
           console.log('Silme başarılı!', res);
-          this.loadManagerTasks(); 
+          this.loadManagerTasks(); // Çalışanlar silemeyeceği için sadece yönetici listesini yenilemek yeterli
         },
         error: (err) => {
           console.error('Silinirken hata oluştu:', err);
@@ -167,7 +211,7 @@ export class Tasks implements OnInit {
     }
   }
 
-  // --- GÖREV YÖNETİM MODALI METOTLARI (GÜNCELLENDİ) ---
+  // --- GÖREV YÖNETİM MODALI METOTLARI ---
 
   openManageModal(task: any) {
   this.selectedManageTask = { 
@@ -181,8 +225,10 @@ export class Tasks implements OnInit {
     this.isManageModalOpen = false;
     this.selectedManageTask = null;
     this.newManageAssignment = { employeeId: 0, assignedHours: null };
+    this.newCompletedHours = null; // Modalı kapatırken çalışanın inputunu da temizliyoruz
   }
-updateAssignedHours(assignment: any) {
+
+  updateAssignedHours(assignment: any) {
     console.log("Seçilen Atama Objesi:", assignment);
 
     // Backend'den dönen ID alanının tam adını yakalamaya çalışıyoruz
@@ -205,7 +251,6 @@ updateAssignedHours(assignment: any) {
         this.loadManagerTasks(); 
       },
       error: (err) => {
-        // Hatanın tam detayını konsola basıyoruz
         console.error('Backend Hatası Detayı:', err);
         
         if (err.status === 404) {
@@ -217,6 +262,35 @@ updateAssignedHours(assignment: any) {
         } else {
           alert(`Saat güncellenemedi. Durum Kodu: ${err.status}`);
         }
+      }
+    });
+  }
+
+  // --- YENİ EKLENEN METOT: ÇALIŞANIN KENDİ İLERLEMESİNİ GÜNCELLEMESİ ---
+  updateMyProgress() {
+    // 1. Girilen saatin geçerliliğini kontrol et
+    if (this.newCompletedHours === null || this.newCompletedHours < 0) {
+      alert('Lütfen geçerli bir tamamlanan saat giriniz.');
+      return;
+    }
+
+    // 2. Görev ID'sini ve Kullanıcı ID'sini yakala
+    const currentTaskId = this.selectedManageTask.taskId || this.selectedManageTask.id; 
+    const currentUserId = Number(localStorage.getItem('userId'));
+
+    // 3. Servise isteği gönder
+    this.taskService.updateEmployeeProgress(currentTaskId, currentUserId, this.newCompletedHours).subscribe({
+      next: (response: any) => {
+        console.log('İlerleme başarıyla güncellendi:', response);
+        this.newCompletedHours = null; // Input alanını sıfırla
+        this.closeManageModal(); // İşlem bitince modalı kapat
+        
+        // Ekrana güncel veriyi yansıtmak için listeyi tekrar çekiyoruz
+        this.loadEmployeeTasks(currentUserId); 
+      },
+      error: (err: any) => {
+        console.error('İlerleme kaydedilirken hata oluştu:', err);
+        alert('Saat güncellenemedi, lütfen tekrar deneyin.');
       }
     });
   }
