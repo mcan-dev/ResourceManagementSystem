@@ -1,57 +1,44 @@
 <div class="sidebar">
 
-    <a
-        routerLink="/dashboard"
-        routerLinkActive="active"
-        class="menu-item">
+  <!-- Üst Kısım: Menü Linkleri -->
+  <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+    Dashboard
+  </a>
 
-         Dashboard
+  <a routerLink="/employee-capacity" routerLinkActive="active" class="menu-item">
+    Employee & Capacity
+  </a>
 
-    </a>
+  <a routerLink="/projects" routerLinkActive="active" class="menu-item">
+    Projects
+  </a>
 
-    <a
-    routerLink="/employee-capacity"
-    routerLinkActive="active"
-    class="menu-item">
+  <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
+    Calendar
+  </a>
 
-     Employee & Capacity
+  <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
+    Leave Requests
+  </a>
 
-</a>
+  <a routerLink="/settings" routerLinkActive="active" class="menu-item">
+    Settings
+  </a>
 
-    <a
-        routerLink="/projects"
-        routerLinkActive="active"
-        class="menu-item">
 
-         Projects
+  <!-- Alt Kısım: Profil Kartı ve Çıkış Butonu -->
+  <div class="sidebar-bottom">
+    
+    <div class="user-profile">
+      <div class="avatar">{{ getInitials(employeeName) }}</div>
+      <div class="user-info">
+        <span class="user-name">{{ employeeName }}</span>
+        <span class="user-role">{{ employeeRole }}</span>
+      </div>
+    </div>
 
-    </a>
-
-    <a
-        routerLink="/calendar"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Calendar
-
-    </a>
-
-    <a
-        routerLink="/leave-request"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Leave Requests
-
-    </a>
-
-    <a
-        routerLink="/settings"
-        routerLinkActive="active"
-        class="menu-item">
-
-         Settings
-
-    </a>
+    <button class="logout-btn-sidebar" (click)="logout()">Çıkış Yap</button>
+    
+  </div>
 
 </div>

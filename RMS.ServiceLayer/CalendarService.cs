@@ -52,7 +52,7 @@ namespace RMS.ServiceLayer
                     EmployeeName = l.Employee?.Name ?? string.Empty,
                     StartDate = l.StartDate,
                     EndDate = l.EndDate,
-                    LeaveType = l.LeaveType
+                    LeaveType = l.LeaveType?.Name
                 }).ToList(),
 
                 Holidays = new List<HolidayDto>

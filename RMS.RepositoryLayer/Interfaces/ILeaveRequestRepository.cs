@@ -15,5 +15,7 @@ namespace RMS.RepositoryLayer.Interfaces
             int year,
             int month,
             CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<LeaveRequest>> GetAllForAdminAsync(
+    CancellationToken cancellationToken = default);
     }
 }

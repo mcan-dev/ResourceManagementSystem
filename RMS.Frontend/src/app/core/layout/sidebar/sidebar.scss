@@ -1,12 +1,15 @@
 .sidebar {
-  width: 240px;
-  height: calc(100vh - 70px);
-  background: white;
-  border-right: 1px solid #e5e7eb;
-  padding: 20px;
-
+  /* Bu 4 satır, profili en alta itmek ve menüyü sabitlemek için KRİTİKTİR */
   display: flex;
   flex-direction: column;
+  height: 100vh; /* Menünün yüksekliğini tam ekran (Viewport Height) yapar */
+  position: sticky; /* Sağ taraftaki içerik kaydığında menünün ekranda sabit kalmasını sağlar */
+  top: 0;
+
+  /* --- Kendi tasarımında var olan diğer ayarları (width, background, padding vs.) buranın altında tutmaya devam et --- */
+  background-color: #f8fafc; /* Örnek kendi rengin */
+  width: 250px; /* Örnek kendi genişliğin */
+  /* border-right: 1px solid #e2e8f0; vs... */
 }
 
 .menu-item {
@@ -34,4 +37,82 @@
 .menu-item.active {
   background: #2563eb;
   color: white;
+}
+
+/* Sidebar'ın alt kısmı (En alta itmek için margin-top: auto kullanıyoruz) */
+.sidebar-bottom {
+  margin-top: auto; /* Üstteki flex yapısı sayesinde kendini en alta yapıştırır */
+  padding: 24px;
+  border-top: 1px solid #e2e8f0; 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Profil Kartı (Avatar + Yazılar) */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Mor Avatar Görseli */
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #6366F1; /* Görseldeki mor tonu */
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* İsim ve Unvan Kapsayıcısı */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* İsim (Açık temaya uygun koyu renk) */
+.user-name {
+  color: #1e293b; /* Koyu lacivert/siyah tonu */
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+/* Unvan (Açık temaya uygun gri ton) */
+.user-role {
+  color: #64748b; /* Orta gri */
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+/* Çıkış Yap Butonu (Koyu Temaya Uygun) */
+.logout-btn-sidebar {
+  width: 100%;
+  background-color: rgba(239, 68, 68, 0.1); 
+  color: #ef4444; 
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #ef4444; 
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
 }

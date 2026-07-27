@@ -70,7 +70,7 @@ public class EmployeeService : IEmployeeService
             Email = request.Email?.Trim(),
             PasswordHash = request.Password,
             UserRole = request.UserRole,
-            Status = string.IsNullOrWhiteSpace(request.Status) ? "active" : request.Status.Trim(),
+            Status = string.IsNullOrWhiteSpace(request.Status) ? "aktif" : request.Status.Trim(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -189,13 +189,14 @@ public class EmployeeService : IEmployeeService
 
         if (string.IsNullOrWhiteSpace(request.Status))
         {
+
             throw new ArgumentException("Employee status is required.", nameof(request));
         }
-        var validStatuses = new[] { "active", "passive", "on_leave" };
+        var validStatuses = new[] { "aktif", "passive", "on_leave" };
 
         if (!validStatuses.Contains(request.Status))
         {
-            throw new ArgumentException("Status must be active, passive or on_leave.", nameof(request));
+            throw new ArgumentException("Status must be aktif, passive or on_leave.", nameof(request));
         }
     }
 

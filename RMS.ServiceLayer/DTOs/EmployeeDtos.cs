@@ -52,7 +52,7 @@ public class CreateEmployeeRequest
 
     [Required]
     [StringLength(50)]
-    public string Status { get; set; } = "active";
+    public string Status { get; set; } = "aktif";
 }
 
 public class UpdateEmployeeRequest
@@ -85,4 +85,20 @@ public class UpdateEmployeeRequest
 
     [StringLength(50)]
     public string? Status { get; set; }
+    
+    public class EmployeeWorkloadDto
+{
+    public int EmployeeId { get; set; }
+
+    public string EmployeeName { get; set; } = string.Empty;
+
+    public string TitleName { get; set; } = string.Empty;
+
+    public int TeamId { get; set; }          // YENİ
+
+    public string TeamName { get; set; } = string.Empty;   // YENİ
+
+    public int Capacity { get; set; }
 }
+}
+

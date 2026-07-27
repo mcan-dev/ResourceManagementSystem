@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>New Employee</h2>
+
+<mat-dialog-content>
+
+<form [formGroup]="employeeForm">
+
+  <mat-form-field appearance="outline">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Surname</mat-label>
+    <input matInput formControlName="surname">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status">
+      <mat-option value="aktif">Aktif</mat-option>
+      <mat-option value="pasif">Pasif</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+  <mat-label>Team</mat-label>
+
+  <mat-select formControlName="teamId">
+    <mat-option [value]="1">Yasal Takip</mat-option>
+    <mat-option [value]="2">Kredi İzleme</mat-option>
+    <mat-option [value]="3">İstihbarat</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="outline">
+  <mat-label>Title</mat-label>
+
+  <mat-select formControlName="titleId">
+    <mat-option [value]="1">Yazılımcı</mat-option>
+    <mat-option [value]="2">Analist</mat-option>
+    <mat-option [value]="3">Tasarımcı</mat-option>
+    <mat-option [value]="4">QA Tester</mat-option>
+    <mat-option [value]="5">Teknik Müdür</mat-option>
+    <mat-option [value]="6">Müdür</mat-option>
+    <mat-option [value]="7">Stajyer</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="outline">
+  <mat-label>Gender</mat-label>
+
+  <mat-select formControlName="gender">
+    <mat-option value="Kadın">Kadın</mat-option>
+    <mat-option value="Erkek">Erkek</mat-option>
+  </mat-select>
+
+</mat-form-field>
+
+</form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+<button
+  mat-button
+  (click)="cancel()">
+
+  Cancel
+
+</button>
+
+<button
+  mat-raised-button
+  color="primary"
+  (click)="save()">
+
+  Save
+
+</button>
+
+</mat-dialog-actions>

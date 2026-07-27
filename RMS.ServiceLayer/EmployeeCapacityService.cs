@@ -49,17 +49,20 @@ public class EmployeeCapacityService : IEmployeeCapacityService
     {
         var capacities = await _employeeCapacityRepository
             .GetEmployeeCapacitiesWithDetailsAsync();
+        var first = capacities.First();
 
         var result = capacities
-            .Select(capacity => new EmployeeWorkloadDto
-            {
-                EmployeeId = capacity.EmployeeId,
-                EmployeeName = $"{capacity.Employee.Name} {capacity.Employee.Surname}",
-                TitleName = capacity.Employee.Title?.TitleName ?? string.Empty,
-                Capacity = capacity.Capacity
-            })
-            .OrderByDescending(x => x.Capacity)
-            .ToList();
+     .Select(capacity => new EmployeeWorkloadDto
+     {
+         EmployeeId = capacity.EmployeeId,
+         EmployeeName = $"{capacity.Employee.Name} {capacity.Employee.Surname}",
+         TeamId = capacity.Employee.TeamId,
+         TeamName = capacity.Employee.Team?.TeamName ?? "",
+         TitleName = capacity.Employee.Title?.TitleName ?? "",
+         Capacity = capacity.Capacity
+     })
+     .OrderByDescending(x => x.Capacity)
+     .ToList();
 
         return result;
     }

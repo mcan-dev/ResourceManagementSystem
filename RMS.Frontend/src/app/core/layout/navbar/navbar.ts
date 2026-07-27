@@ -1,20 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [AsyncPipe], 
   templateUrl: './navbar.html',
-  styleUrl: './navbar.scss',
+  styleUrls: ['./navbar.scss']
 })
 export class Navbar {
+  
+  public pageHeaderService = {
+    title$: new BehaviorSubject<string>('Resource Management System')
+  };
 
-  constructor(private router: Router) {}
-
-  logout() {
-    this.router.navigate(['/login']);
-  }
-
+  // Çıkış yapma mantığı Sidebar'a taşındığı için constructor(Router) ve logout() metodu tamamen silindi.
 }

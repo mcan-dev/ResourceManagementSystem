@@ -1,37 +1,48 @@
-.navbar {
-    height: 70px;
-    background: #fff;
-    border-bottom: 1px solid #e5e7eb;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 0 30px;
+:host {
+  display: block;
+  width: 100%;
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: 700;
+.navbar-container {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+  
+  
+  padding: 24px 32px; 
+  min-height: 80px; 
+  
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-sizing: border-box;
 }
-
-.user-section {
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 16px;
-}
-
-.username {
-
-    font-size: 18px;
-    font-weight: 500;
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #1e293b;
 }
 
 .logout-btn {
+  background-color: #ef4444; 
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
 
-    height: 38px;
-    min-width: 110px;
+  /* Fare ile üzerine gelindiğinde rengi koyulaşır */
+  &:hover {
+    background-color: #dc2626; 
+  }
+
+  /* Tıklandığında hafifçe küçülme animasyonu */
+  &:active {
+    transform: scale(0.96);
+  }
 }

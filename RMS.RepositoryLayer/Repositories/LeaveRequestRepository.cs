@@ -45,5 +45,17 @@ namespace RMS.RepositoryLayer.Repositories
                     (l.EndDate.Year == year && l.EndDate.Month == month))
                 .ToListAsync(cancellationToken);
         }
+        public async Task<IReadOnlyList<LeaveRequest>> GetAllForAdminAsync(
+    CancellationToken cancellationToken = default)
+        {
+            return await _context.LeaveRequests
+                .Include(l => l.Employee)
+                    .ThenInclude(e => e.Team)
+                .Include(l => l.LeaveType)
+                .Include(l => l.LeaveStatus)
+                .OrderByDescending(l => l.CreatedAt)
+                .ToListAsync(cancellationToken);
+        }
     }
+
 }

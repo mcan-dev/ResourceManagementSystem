@@ -6,7 +6,7 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { EmployeeCapacity } from './features/employee-capacity/employee-capacity';
 import { Projects } from './features/projects/projects';
 import { CalendarComponent } from './features/calendar/calendar';
-import { LeaveRequest } from './features/leave-request/leave-request';
+import { LeaveRequestComponent } from './features/leave-request/leave-request';
 import { Settings } from './features/settings/settings';
 
 import { MainLayout } from './core/layout/main-layout/main-layout';
@@ -45,7 +45,7 @@ export const routes: Routes = [
       },
       {
         path: 'leave-request',
-        component: LeaveRequest
+        component: LeaveRequestComponent
       },
       {
         path: 'settings',

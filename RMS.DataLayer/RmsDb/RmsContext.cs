@@ -185,9 +185,8 @@ public partial class RmsContext : DbContext
             entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
             entity.Property(e => e.EndDate).HasColumnName("end_date");
             entity.Property(e => e.LeaveStatusId).HasColumnName("leave_status_id");
-            entity.Property(e => e.LeaveType)
-                .HasMaxLength(250)
-                .HasColumnName("leave_type");
+            entity.Property(e => e.LeaveTypeId)
+                .HasColumnName("leave_type_id");
             entity.Property(e => e.StartDate).HasColumnName("start_date");
             entity.Property(e => e.TotalDays).HasColumnName("total_days");
             entity.Property(e => e.UpdatedAt)
@@ -199,10 +198,11 @@ public partial class RmsContext : DbContext
                 .HasForeignKey(d => d.EmployeeId)
                 .HasConstraintName("FK__leave_req__emplo__6A1BB7B0");
 
-            entity.HasOne(d => d.LeaveStatus).WithMany(p => p.LeaveRequests)
-                .HasForeignKey(d => d.LeaveStatusId)
+            entity.HasOne(d => d.LeaveType)
+                .WithMany(p => p.LeaveRequests)
+                .HasForeignKey(d => d.LeaveTypeId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__leave_req__leave__6C040022");
+                .HasConstraintName("FK_leave_requests_leave_types");
         });
 
         modelBuilder.Entity<LeaveStatus>(entity =>

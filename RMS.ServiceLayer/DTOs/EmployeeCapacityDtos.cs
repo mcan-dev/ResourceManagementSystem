@@ -15,12 +15,19 @@ namespace RMS.ServiceLayer.DTOs;
     }
 
     public class EmployeeWorkloadDto
-    {
-        public int EmployeeId { get; set; }
-        public string EmployeeName { get; set; } = string.Empty;
-        public string TitleName { get; set; } = string.Empty;
-        public int Capacity { get; set; }
-    }
+{
+    public int EmployeeId { get; set; }
+
+    public string EmployeeName { get; set; } = string.Empty;
+
+    public string TitleName { get; set; } = string.Empty;
+
+    public int TeamId { get; set; }
+
+    public string TeamName { get; set; } = string.Empty;
+
+    public int Capacity { get; set; }
+}
 
     public class EmployeeCapacityDetailDto
     {

@@ -1,0 +1,166 @@
+.custom-table-container {
+  position: relative;
+  margin: 24px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E8EBF2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.loading-shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-leave-table {
+  width: 100%;
+  background: transparent;
+
+  /* Material tablosunun varsayılan gölgelerini ve arka planlarını sıfırlıyoruz */
+  box-shadow: none !important;
+
+  th.mat-mdc-header-cell {
+    color: #6B7280;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #E8EBF2;
+  }
+
+  td.mat-mdc-cell {
+    padding: 16px 24px;
+    border-bottom: 1px solid #E8EBF2;
+    vertical-align: middle;
+  }
+
+  tr.mat-mdc-row:last-child td.mat-mdc-cell {
+    border-bottom: none;
+  }
+}
+
+/* Personel Hücresi */
+.employee-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    background: #6366F1; /* Mor */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .emp-details {
+    display: flex;
+    flex-direction: column;
+    .name { font-weight: 600; font-size: 14px; color: #111827; }
+    .dept { color: #6B7280; font-size: 12px; margin-top: 2px; }
+  }
+}
+
+/* İzin Türü */
+.leave-type-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+
+  .paid-badge {
+    background: #D1FAE5;
+    color: #065F46;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  
+  .unpaid-badge {
+    background: #F3F4F6;
+    color: #4B5563;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+}
+
+/* Tarih */
+.date-cell {
+  display: flex;
+  flex-direction: column;
+  .date-range { font-size: 13px; color: #4B5563; }
+  .days { color: #9CA3AF; font-size: 12px; margin-top: 2px; }
+}
+
+/* Açıklama */
+.desc-cell {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+/* Durum Rozetleri */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+
+  &.status-pending { background: #FEF3C7; color: #D97706; } /* Sarı */
+  &.status-approved { background: #D1FAE5; color: #059669; } /* Yeşil */
+  &.status-rejected { background: #FEE2E2; color: #DC2626; } /* Kırmızı */
+}
+
+/* Aksiyon Butonları */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+
+    &.btn-approve {
+      background: #10B981;
+      color: white;
+      &:hover { background: #059669; }
+    }
+
+    &.btn-reject {
+      background: #FEE2E2;
+      color: #DC2626;
+      &:hover { background: #FECACA; }
+    }
+  }
+}
+
+.no-action {
+  color: #9CA3AF;
+  font-weight: 600;
+  margin-left: 12px;
+}
