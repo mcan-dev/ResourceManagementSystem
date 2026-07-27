@@ -1,8 +1,9 @@
 ﻿using RMS.DataLayer.Entities;
 using RMS.RepositoryLayer.Interfaces;
 using RMS.ServiceLayer.DTOs;
+using RMS.ServiceLayer.Interfaces;
 
-namespace RMS.ServiceLayer;
+namespace RMS.ServiceLayer.Services;
 
 public class EmployeeCapacityService : IEmployeeCapacityService
 {

@@ -2,9 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using RMS.DataLayer.RmsDb;
 using RMS.RepositoryLayer.Interfaces;
 using RMS.RepositoryLayer.Repositories;
-using RMS.RepositoryLayer.Repositories.RMS.RepositoryLayer.Repositories;
+using RMS.ServiceLayer;
+using RMS.ServiceLayer.DTOs;
 using RMS.ServiceLayer.Interfaces;
-using RMS.ServiceLayer.Interfaces;
+using RMS.ServiceLayer.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +34,6 @@ builder.Services.AddScoped<ITaskAssignmentService, TaskAssignmentService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEmployeeCapacityRepository, EmployeeCapacityRepository>();
 builder.Services.AddScoped<IWorkCalendarRepository, WorkCalendarRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 builder.Services.AddScoped<IEmployeeCapacityService, EmployeeCapacityService>();
 builder.Services.AddScoped<ICalendarService, CalendarService>();

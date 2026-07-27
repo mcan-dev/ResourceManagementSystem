@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RMS.ServiceLayer;
+using RMS.ServiceLayer.Interfaces;
 
 namespace RMS.API.Controllers;
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RMS.ServiceLayer.DTOs;
 
-namespace RMS.ServiceLayer
+namespace RMS.ServiceLayer.Interfaces
 {
     public interface ILeaveRequestService
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RMS.ServiceLayer.DTOs;
 using System.Linq;
-using RMS.DataLayer.RmsDb; 
+using RMS.DataLayer.RmsDb;
 
 namespace RMS.API.Controllers
 {
@@ -26,7 +26,7 @@ namespace RMS.API.Controllers
         {
             try
             {
-              
+
                 if (string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
                     return BadRequest(new { Message = "E-posta ve şifre boş bırakılamaz." });
 
@@ -38,11 +38,13 @@ namespace RMS.API.Controllers
 
 
                 if (user == null)
+                {
 
                     return Unauthorized(new { Message = "Hatalı e-posta veya şifre girdiniz." });
 
-               
+                }
                 if (user.Status != "Aktif")
+                {
                     return BadRequest(new { Message = "Hesabınız aktif durumda değil." });
                 }
 
@@ -57,7 +59,7 @@ namespace RMS.API.Controllers
             }
             catch (System.Exception ex)
             {
-              
+
                 var gercekHata = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return StatusCode(500, new
                 {
@@ -68,3 +70,4 @@ namespace RMS.API.Controllers
         }
     }
 }
+    

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RMS.RepositoryLayer.Repositories
 {
-    internal class TaskProgressRepository : GenericRepository<TaskProgress>, ITaskProgressRepository
+    public class TaskProgressRepository : GenericRepository<TaskProgress>, ITaskProgressRepository
     {
         public TaskProgressRepository(RmsContext context) : base(context)
         {
