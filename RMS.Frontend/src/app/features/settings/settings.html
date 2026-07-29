@@ -1,1 +1,105 @@
-<p>settings works!</p>
+<div class="settings-container">
+  
+  <div class="cards-wrapper">
+    
+    <!-- EMAIL CHANGE KARTI -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>Email Change</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="emailForm" (ngSubmit)="onEmailUpdate()" class="settings-form">
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>New Email</mat-label>
+            <input matInput formControlName="newEmail" type="email" placeholder="example@domain.com">
+            <mat-error *ngIf="emailForm.get('newEmail')?.hasError('required')">New email is required.</mat-error>
+            <mat-error *ngIf="emailForm.get('newEmail')?.hasError('email')">Invalid email format.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirm Email</mat-label>
+            <input matInput formControlName="confirmEmail" type="email" placeholder="Confirm your new email">
+            <mat-error *ngIf="emailForm.get('confirmEmail')?.hasError('required')">Confirm email is required.</mat-error>
+            <mat-error *ngIf="emailForm.get('confirmEmail')?.hasError('email')">Invalid email format.</mat-error>
+            <mat-error *ngIf="emailForm.get('confirmEmail')?.hasError('matching')">Emails do not match.</mat-error>
+          </mat-form-field>
+
+          <div class="action-row">
+            <button mat-flat-button color="primary" type="submit" [disabled]="emailForm.invalid || isEmailLoading">
+              <span *ngIf="!isEmailLoading">Update Email</span>
+              <mat-spinner *ngIf="isEmailLoading" diameter="24"></mat-spinner>
+            </button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASSWORD CHANGE KARTI -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>Password Change</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="passwordForm" (ngSubmit)="onPasswordUpdate()" class="settings-form">
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Current Password</mat-label>
+            <input matInput formControlName="currentPassword" type="password">
+            <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">Current password is required.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>New Password</mat-label>
+            <input matInput formControlName="newPassword" type="password">
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">New password is required.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput formControlName="confirmPassword" type="password">
+            <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('required')">Confirm password is required.</mat-error>
+            <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('matching')">Passwords do not match.</mat-error>
+          </mat-form-field>
+
+          <div class="action-row">
+            <button mat-flat-button color="primary" type="submit" [disabled]="passwordForm.invalid || isPasswordLoading">
+              <span *ngIf="!isPasswordLoading">Update Password</span>
+              <mat-spinner *ngIf="isPasswordLoading" diameter="24"></mat-spinner>
+            </button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="settings-card">
+  <mat-card-header>
+    <mat-card-title>Appearance</mat-card-title>
+    <mat-card-subtitle>Customize your application</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+        <h3>Dark Mode</h3>
+        <p>Switch between light and dark theme.</p>
+      </div>
+
+        <mat-slide-toggle
+        [(ngModel)]="isDarkTheme"
+        (change)="onThemeChanged()">
+        </mat-slide-toggle>
+
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+  </div>
+</div>

@@ -13,5 +13,9 @@ namespace RMS.RepositoryLayer.Interfaces
         Task<Employee?> GetEmployeeWithDetailsByIdAsync(int id);
         Task<Employee?> GetEmployeeByEmailAsync(string email);
         Task<IEnumerable<Employee>> GetEmployeesByTeamIdAsync(int teamId);
+
+        Task<bool> UpdateEmailAsync(int employeeId, string newEmail);
+        Task<bool> UpdatePasswordAsync(int employeeId, string newPassword);
+        Task<Employee?> GetEmployeeByIdAsync(int employeeId);
     }
 }

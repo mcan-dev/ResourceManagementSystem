@@ -1,0 +1,143 @@
+// Kurumsal Tema Değişkenleri (Soft renkler)
+$bg-color: #f8f9fa;
+$text-main: #202124;
+$text-muted: #5f6368;
+$border-color: #e0e0e0;
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+.page-container {
+  padding: 32px;
+  background-color: $bg-color;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+
+  .header-content {
+    .page-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: $text-main;
+      letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+      margin: 6px 0 0;
+      font-size: 14px;
+      color: $text-muted;
+    }
+  }
+
+  .new-request-btn {
+    border-radius: 8px;
+    padding: 0 20px;
+    height: 40px;
+    font-weight: 500;
+  }
+}
+
+.content-card {
+  border-radius: 12px !important;
+  box-shadow: $card-shadow !important;
+  padding: 0 !important; // Tablonun köşelere tam oturması için padding'i sıfırlıyoruz
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* --- Durum (State) Ekranları Tasarımı --- */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+
+  .state-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+
+    &.color-error {
+      color: #d32f2f;
+    }
+    &.color-neutral {
+      color: #9aa0a6;
+    }
+  }
+
+  .state-text {
+    color: $text-muted;
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+/* --- Tablo Tasarımı --- */
+.table-container {
+  overflow-x: auto;
+
+  .rms-table {
+    width: 100%;
+    
+    th.mat-header-cell {
+      background-color: #fbfbfb; // Başlıklar için çok hafif gri arkaplan
+      color: $text-main;
+      font-weight: 600;
+      font-size: 14px;
+      border-bottom: 1px solid $border-color;
+      padding: 16px;
+    }
+
+    td.mat-cell {
+      color: $text-muted;
+      border-bottom: 1px solid $border-color;
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    // Satır üzerine gelince hover efekti
+    tr.mat-row:hover {
+      background-color: rgba(0, 0, 0, 0.015);
+    }
+  }
+}
+
+/* --- Rozet (Chip) Tasarımları --- */
+.chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  &.type-chip {
+    background-color: #f1f3f4;
+    color: $text-main;
+  }
+
+  &.status-chip {
+    &.bekliyor {
+      background-color: #fef7e0;
+      color: #b06000;
+    }
+    
+    &.onaylandı {
+      background-color: #e6f4ea;
+      color: #137333;
+    }
+    
+    &.reddedildi {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+  }
+}

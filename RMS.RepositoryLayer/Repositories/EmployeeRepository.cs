@@ -46,5 +46,41 @@ namespace RMS.RepositoryLayer.Repositories
                 .Where(e => e.TeamId == teamId)
                 .ToListAsync();
         }
+
+        public async Task<bool> UpdateEmailAsync(int employeeId, string newEmail)
+        {
+            var employee = await _context.Employees.FindAsync(employeeId);
+
+            if (employee == null)
+                return false;
+
+            employee.Email = newEmail;
+            employee.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdatePasswordAsync(int employeeId, string newPassword)
+        {
+            var employee = await _context.Employees.FindAsync(employeeId);
+
+            if (employee == null)
+                return false;
+
+            employee.PasswordHash = newPassword;
+            employee.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Employee?> GetEmployeeByIdAsync(int employeeId)
+        {
+            return await _context.Employees
+                .FirstOrDefaultAsync(e => e.Id == employeeId);
+        }
     }
 }

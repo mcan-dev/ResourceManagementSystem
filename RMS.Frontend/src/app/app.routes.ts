@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { Login } from './features/auth/login/login';
 import { Dashboard } from './features/dashboard/dashboard';
+import { roleGuard } from './core/guards/role.guard';
 
 import { EmployeeCapacity } from './features/employee-capacity/employee-capacity';
 import { Projects } from './features/projects/projects';
@@ -35,7 +36,7 @@ export const routes: Routes = [
         path: 'employee-capacity',
         component: EmployeeCapacity
       },
-           {
+      {
         path: 'projects',
         component: Projects
       },
@@ -46,14 +47,27 @@ export const routes: Routes = [
       {
         path: 'leave-request',
         component: LeaveRequestComponent
+        // Not: İleride Yönetici tarafını kilitlediğimizde buraya da guard ekleyeceğiz.
+        // canActivate: [roleGuard],
+        // data: { roles: ['Manager'] }
       },
       {
         path: 'settings',
         component: Settings
+      },
+      
+      // ÇALIŞAN İZİN SAYFASI: MainLayout içine alındı (Menülerin görünmesi için) ve Guard eklendi
+    {
+        path: 'my-leave-requests',
+        loadComponent: () => import('./features/my-leave-requests/my-leave-requests').then(m => m.MyLeaveRequests),
+        title: 'İzin Taleplerim - RMS',
+        canActivate: [roleGuard],
+        data: { roles: ['Employee', 'Admin', 'Manager'] } // Yöneticiler de test için girebilsin
       }
     ]
   },
 
+  // WILDCARD (**): Her zaman en sonda olmalıdır. Aksi halde altındaki rotalar çalışmaz.
   {
     path: '**',
     redirectTo: 'login'

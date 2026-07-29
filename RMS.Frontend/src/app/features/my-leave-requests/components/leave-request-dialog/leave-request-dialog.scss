@@ -1,0 +1,58 @@
+// Kurumsal Tema Değişkenleri
+$text-main: #202124;
+$text-muted: #5f6368;
+
+.dialog-title {
+  margin: 0;
+  color: $text-main;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 24px 24px 0; // Üstten ve yanlardan ferah boşluk
+}
+
+.dialog-content {
+  padding: 24px;
+  overflow-y: auto; 
+}
+
+.leave-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // İnputlar arası tutarlı boşluk
+}
+
+/* Material form elemanlarının tüm alanı kaplamasını sağlarız */
+.full-width {
+  width: 100%;
+}
+
+/* Textarea'nın boyutlandırılmasını (resize) engellemek iyi bir UX kuralıdır */
+textarea {
+  resize: none;
+}
+
+.dialog-actions {
+  padding: 16px 24px 24px;
+  margin-bottom: 0;
+  
+  // Butonlar arasına hafif bir boşluk bırakıyoruz
+  button {
+    margin-left: 12px; 
+    font-weight: 500;
+  }
+}
+
+/* Kaydet Butonunun İçindeki Yükleniyor (Loading) Durumu */
+.loading-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; // Spinner ile metin arası boşluk
+
+  /* Material Spinner varsayılan olarak temanın ana rengini (mavi/mor vs.) alır. 
+     Primary (renkli) butonun içinde beyaz görünmesi için rengini eziyoruz. */
+  ::ng-deep .mat-progress-spinner circle, 
+  ::ng-deep .mat-spinner circle {
+    stroke: #ffffff;
+  }
+}

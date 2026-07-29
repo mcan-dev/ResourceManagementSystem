@@ -20,7 +20,9 @@ namespace RMS.RepositoryLayer.Repositories
         {
             return await _context.LeaveRequests
                 .Where(lr => lr.EmployeeId == employeeId)
-                .Include(lr => lr.LeaveStatus) 
+                .Include(lr => lr.LeaveType)
+                .Include(lr => lr.LeaveStatus)
+                .OrderByDescending(lr => lr.CreatedAt)
                 .ToListAsync();
         }
 

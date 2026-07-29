@@ -49,4 +49,45 @@ public class LeaveRequestsController : ControllerBase
             });
         }
     }
+    [HttpGet("my-requests")]
+    public async Task<IActionResult> GetMyRequests(
+    CancellationToken cancellationToken)
+    {
+        // Geçici olarak sabit kullanıcı
+        int employeeId = 1;
+
+        var result = await _leaveRequestService.GetMyRequestsAsync(
+            employeeId,
+            cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateLeaveRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            int employeeId = 1;
+
+            await _leaveRequestService.CreateAsync(
+                employeeId,
+                request,
+                cancellationToken);
+
+            return Ok(new
+            {
+                Message = "Leave request created successfully."
+            });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
+            {
+                Message = ex.Message
+            });
+        }
+    }
 }
