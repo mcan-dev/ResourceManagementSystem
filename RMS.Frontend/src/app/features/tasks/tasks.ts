@@ -4,6 +4,7 @@ import { TaskAssignmentService } from '../../core/services/task-assignment.servi
 import { FormsModule } from '@angular/forms';
 import { EmployeeService } from '../../core/services/employee-service';
 import { ProjectService } from '../../core/services/project-service';
+import { PageHeaderService } from '../../core/services/page-header';
 
 @Component({
   selector: 'app-tasks',
@@ -51,14 +52,15 @@ export class Tasks implements OnInit {
     private taskService: TaskAssignmentService, 
     private employeeService: EmployeeService,
     private projectService: ProjectService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private pageHeaderService: PageHeaderService
   ) {}
 
   ngOnInit(): void {
     // KULLANICI ROLÜNÜ, İSMİNİ VE ID'SİNİ YAKALIYORUZ
     this.userRole = localStorage.getItem('userRole') || '';
     this.userName = localStorage.getItem('userName') || localStorage.getItem('fullName') || 'Bilinmeyen Kullanıcı'; // İsmi güvenli şekilde aldık
-    
+     this.pageHeaderService.setTitle('Görev & Atama');
     const userIdStr = localStorage.getItem('userId');
     const userId = userIdStr ? Number(userIdStr) : 0;
 
@@ -72,7 +74,7 @@ export class Tasks implements OnInit {
     }
   }
 
-  loadDropdownData() {
+ loadDropdownData() {
     this.projectService.getAll().subscribe({
       next: (data: any) => {
         console.log('Gelen Projeler:', data); 
@@ -82,7 +84,7 @@ export class Tasks implements OnInit {
       error: (err: any) => console.error('Projeler çekilemedi:', err)
     });
 
-    this.employeeService.getAll().subscribe({
+    this.employeeService.getEmployeesForDropdown().subscribe({
       next: (data: any) => {
         console.log('Gelen Personeller:', data); 
         this.employees = data;

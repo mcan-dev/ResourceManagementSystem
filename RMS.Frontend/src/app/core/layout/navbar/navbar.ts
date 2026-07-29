@@ -12,15 +12,14 @@ import { PageHeaderService } from '../../services/page-header';
 })
 export class Navbar {
   
-  public pageHeaderService = {
-    title$: new BehaviorSubject<string>('Resource Management System')
-  };
+  // Burada yer alan hatalı public pageHeaderService = { ... } bloğu tamamen silindi.
 
-  constructor(public pageHeaderService: PageHeaderService,
-     private router: Router) {}
+  constructor(
+    public pageHeaderService: PageHeaderService,
+    private router: Router
+  ) {}
 
   logout() {
     this.router.navigate(['/login']);
   }
-
 }

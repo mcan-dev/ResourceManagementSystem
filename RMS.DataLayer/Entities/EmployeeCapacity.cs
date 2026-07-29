@@ -9,8 +9,6 @@ public partial class EmployeeCapacity
 
     public int Capacity { get; set; }
 
-    public int ProjectId { get; set; }
-
     public int EmployeeId { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -19,5 +17,4 @@ public partial class EmployeeCapacity
 
     public virtual Employee Employee { get; set; } = null!;
 
-    public virtual Project Project { get; set; } = null!;
 }

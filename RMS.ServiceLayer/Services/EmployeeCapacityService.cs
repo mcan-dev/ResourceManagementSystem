@@ -2,46 +2,59 @@
 using RMS.RepositoryLayer.Interfaces;
 using RMS.ServiceLayer.DTOs;
 using RMS.ServiceLayer.Interfaces;
+using System.Linq;
 
 namespace RMS.ServiceLayer.Services;
 
 public class EmployeeCapacityService : IEmployeeCapacityService
 {
     private readonly IEmployeeCapacityRepository _employeeCapacityRepository;
-
-    public EmployeeCapacityService(IEmployeeCapacityRepository employeeCapacityRepository)
+    private readonly ITaskAssignmentRepository _taskAssignmentRepository;
+   
+    public EmployeeCapacityService(IEmployeeCapacityRepository employeeCapacityRepository, ITaskAssignmentRepository taskAssignmentRepository)
     {
         _employeeCapacityRepository = employeeCapacityRepository;
+        _taskAssignmentRepository = taskAssignmentRepository;
     }
-    private async Task<int> GetEmployeeTotalCapacityAsync(int employeeId)
-    {
-        var employeeCapacities = await _employeeCapacityRepository
-            .GetEmployeeCapacitiesByEmployeeAsync(employeeId);
 
-        return employeeCapacities.Sum(x => x.Capacity);
+    private async Task<int> GetEmployeeAssignedHoursAsync(int employeeId)
+    {
+
+        var assignments = await _taskAssignmentRepository.FindAsync(t => t.EmployeeId == employeeId);
+
+        return (int)(assignments?.Sum(t => t.AssignedHours) ?? 0);
     }
+
     public async Task<IReadOnlyList<TeamCapacityDto>> GetTeamCapacitiesAsync()
     {
-       var capacities = await _employeeCapacityRepository
-       .GetEmployeeCapacitiesWithDetailsAsync();
+        var capacities = await _employeeCapacityRepository
+            .GetEmployeeCapacitiesWithDetailsAsync();
 
-       var groupedCapacities = capacities
-       .GroupBy(ec => ec.Employee.TeamId);
+        var groupedCapacities = capacities
+            .GroupBy(ec => ec.Employee.TeamId);
 
-        var result = groupedCapacities
-    .Select(group => new TeamCapacityDto
-    {
-        TeamId = group.Key,
-        TeamName = group.First().Employee.Team?.TeamName ?? string.Empty,
+        var result = new List<TeamCapacityDto>();
 
-        EmployeeCount = group
-            .Select(x => x.EmployeeId)
-            .Distinct()
-            .Count(),
+        foreach (var group in groupedCapacities)
+        {
 
-        AverageCapacity = (int)Math.Round(group.Average(x => x.Capacity))
-    })
-    .ToList();
+            var teamRemainingCapacities = new List<int>();
+
+            foreach (var capacity in group)
+            {
+                int assignedHours = await GetEmployeeAssignedHoursAsync(capacity.EmployeeId);
+                int remaining = 80 - assignedHours;
+                teamRemainingCapacities.Add(remaining < 0 ? 0 : remaining); 
+            }
+
+            result.Add(new TeamCapacityDto
+            {
+                TeamId = group.Key,
+                TeamName = group.First().Employee.Team?.TeamName ?? string.Empty,
+                EmployeeCount = group.Select(x => x.EmployeeId).Distinct().Count(),
+                AverageCapacity = teamRemainingCapacities.Any() ? (int)Math.Round(teamRemainingCapacities.Average()) : 0
+            });
+        }
 
         return result;
     }
@@ -50,22 +63,26 @@ public class EmployeeCapacityService : IEmployeeCapacityService
     {
         var capacities = await _employeeCapacityRepository
             .GetEmployeeCapacitiesWithDetailsAsync();
-        var first = capacities.First();
 
-        var result = capacities
-     .Select(capacity => new EmployeeWorkloadDto
-     {
-         EmployeeId = capacity.EmployeeId,
-         EmployeeName = $"{capacity.Employee.Name} {capacity.Employee.Surname}",
-         TeamId = capacity.Employee.TeamId,
-         TeamName = capacity.Employee.Team?.TeamName ?? "",
-         TitleName = capacity.Employee.Title?.TitleName ?? "",
-         Capacity = capacity.Capacity
-     })
-     .OrderByDescending(x => x.Capacity)
-     .ToList();
+        var result = new List<EmployeeWorkloadDto>();
 
-        return result;
+        foreach (var capacity in capacities)
+        {
+            int assignedHours = await GetEmployeeAssignedHoursAsync(capacity.EmployeeId);
+            int remainingCapacity = 80 - assignedHours;
+
+            result.Add(new EmployeeWorkloadDto
+            {
+                EmployeeId = capacity.EmployeeId,
+                EmployeeName = $"{capacity.Employee.Name} {capacity.Employee.Surname}",
+                TeamId = capacity.Employee.TeamId,
+                TeamName = capacity.Employee.Team?.TeamName ?? "",
+                TitleName = capacity.Employee.Title?.TitleName ?? "",
+                Capacity = remainingCapacity < 0 ? 0 : remainingCapacity 
+            });
+        }
+
+        return result.OrderByDescending(x => x.Capacity).ToList();
     }
 
     public async Task<IReadOnlyList<EmployeeCapacityDetailDto>> GetEmployeeCapacityDetailsAsync(int employeeId)
@@ -73,33 +90,29 @@ public class EmployeeCapacityService : IEmployeeCapacityService
         var capacities = await _employeeCapacityRepository
             .GetEmployeeCapacitiesWithDetailsAsync();
 
-        var result = capacities
-            .Where(x => x.EmployeeId == employeeId)
-            .Select(x => new EmployeeCapacityDetailDto
+        var targetCapacities = capacities.Where(x => x.EmployeeId == employeeId).ToList();
+        var result = new List<EmployeeCapacityDetailDto>();
+
+        foreach (var x in targetCapacities)
+        {
+            int assignedHours = await GetEmployeeAssignedHoursAsync(x.EmployeeId);
+            int remainingCapacity = 80 - assignedHours;
+
+            result.Add(new EmployeeCapacityDetailDto
             {
                 EmployeeId = x.EmployeeId,
                 EmployeeName = $"{x.Employee.Name} {x.Employee.Surname}",
-                ProjectName = x.Project.ProjectName,
-                Capacity = x.Capacity
-            })
-            .OrderByDescending(x => x.Capacity)
-            .ToList();
+                Capacity = remainingCapacity < 0 ? 0 : remainingCapacity
+            });
+        }
 
-        return result;
+        return result.OrderByDescending(x => x.Capacity).ToList();
     }
-    public async Task<IReadOnlyList<EmployeeCapacityDto>> GetCapacitiesAsync(
-    int? projectId = null,
-    int? employeeId = null)
+
+    public async Task<IReadOnlyList<EmployeeCapacityDto>> GetCapacitiesAsync(int? employeeId = null)
     {
         var capacities = await _employeeCapacityRepository
             .GetEmployeeCapacitiesWithDetailsAsync();
-
-        if (projectId.HasValue)
-        {
-            capacities = capacities
-                .Where(x => x.ProjectId == projectId.Value)
-                .ToList();
-        }
 
         if (employeeId.HasValue)
         {
@@ -108,55 +121,42 @@ public class EmployeeCapacityService : IEmployeeCapacityService
                 .ToList();
         }
 
-        return capacities
-            .Select(x => new EmployeeCapacityDto
+        var result = new List<EmployeeCapacityDto>();
+
+        foreach (var x in capacities)
+        {
+            int assignedHours = await GetEmployeeAssignedHoursAsync(x.EmployeeId);
+            int remainingCapacity = 80 - assignedHours;
+
+            result.Add(new EmployeeCapacityDto
             {
                 Id = x.Id,
                 EmployeeId = x.EmployeeId,
                 EmployeeName = $"{x.Employee.Name} {x.Employee.Surname}",
-                ProjectId = x.ProjectId,
-                ProjectName = x.Project.ProjectName,
-                Capacity = x.Capacity
-            })
-            .ToList();
+                Capacity = remainingCapacity < 0 ? 0 : remainingCapacity
+            });
+        }
+
+        return result;
     }
 
-    public async Task<EmployeeCapacityDto> CreateCapacityAsync(
-    CreateEmployeeCapacityRequest request)
+    public async Task<EmployeeCapacityDto> CreateCapacityAsync(CreateEmployeeCapacityRequest request)
     {
-        if (await _employeeCapacityRepository.ExistsAsync(
-        request.EmployeeId,
-        request.ProjectId))
+        if (request.Capacity < 0 || request.Capacity > 80)
         {
-            throw new InvalidOperationException(
-                "Bu personel bu projeye zaten atanmış.");
+            throw new InvalidOperationException("Kapasite 0 ile 80 saat arasında olmalıdır.");
         }
-        if (request.Capacity < 0)
-        {
-            throw new InvalidOperationException("Kapasite 0'dan küçük olamaz.");
-        }
-        var totalCapacity = await GetEmployeeTotalCapacityAsync(request.EmployeeId);
 
-        var employeeCapacities = await _employeeCapacityRepository
-    .GetEmployeeCapacitiesByEmployeeAsync(request.EmployeeId);
-
-        if (totalCapacity + request.Capacity > 100)
+        var exists = await _employeeCapacityRepository.ExistsAsync(request.EmployeeId);
+        if (exists)
         {
-            throw new InvalidOperationException("Personelin toplam kapasitesi %100'ü aşamaz.");
-        }
-        if (await _employeeCapacityRepository.ExistsAsync(
-        request.EmployeeId,
-        request.ProjectId))
-        {
-            throw new InvalidOperationException(
-                "Bu personel bu projeye zaten atanmış.");
+            throw new InvalidOperationException("Bu personelin zaten bir kapasite kaydı bulunmaktadır.");
         }
 
         var employeeCapacity = new EmployeeCapacity
         {
             EmployeeId = request.EmployeeId,
-            ProjectId = request.ProjectId,
-            Capacity = request.Capacity,
+            Capacity = request.Capacity, 
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -168,18 +168,15 @@ public class EmployeeCapacityService : IEmployeeCapacityService
         {
             Id = employeeCapacity.Id,
             EmployeeId = employeeCapacity.EmployeeId,
-            ProjectId = employeeCapacity.ProjectId,
             Capacity = employeeCapacity.Capacity
         };
     }
 
-    public async Task<EmployeeCapacityDto?> UpdateCapacityAsync(
-    int id,
-    UpdateEmployeeCapacityRequest request)
+    public async Task<EmployeeCapacityDto?> UpdateCapacityAsync(int id, UpdateEmployeeCapacityRequest request)
     {
-        if (request.Capacity < 0)
+        if (request.Capacity < 0 || request.Capacity > 80)
         {
-            throw new InvalidOperationException("Kapasite 0'dan küçük olamaz.");
+            throw new InvalidOperationException("Kapasite 0 ile 80 saat arasında olmalıdır.");
         }
 
         var employeeCapacity = await _employeeCapacityRepository.GetByIdAsync(id);
@@ -189,36 +186,21 @@ public class EmployeeCapacityService : IEmployeeCapacityService
             return null;
         }
 
-        var totalCapacity = await GetEmployeeTotalCapacityAsync(employeeCapacity.EmployeeId);
-
-        var newTotalCapacity =
-            totalCapacity
-            - employeeCapacity.Capacity
-            + request.Capacity;
-
-        if (newTotalCapacity > 100)
-        {
-            throw new InvalidOperationException("Personelin toplam kapasitesi %100'ü aşamaz.");
-        }
-
         employeeCapacity.Capacity = request.Capacity;
         employeeCapacity.UpdatedAt = DateTime.UtcNow;
 
         _employeeCapacityRepository.Update(employeeCapacity);
-
         await _employeeCapacityRepository.SaveChangesAsync();
 
         return new EmployeeCapacityDto
         {
             Id = employeeCapacity.Id,
             EmployeeId = employeeCapacity.EmployeeId,
-            ProjectId = employeeCapacity.ProjectId,
             Capacity = employeeCapacity.Capacity
         };
     }
 
-    public async Task<EmployeeCapacitySummaryDto?> GetEmployeeCapacitySummaryAsync(
-    int employeeId)
+    public async Task<EmployeeCapacitySummaryDto?> GetEmployeeCapacitySummaryAsync(int employeeId)
     {
         var capacities = await _employeeCapacityRepository
             .GetEmployeeCapacitiesByEmployeeAsync(employeeId);
@@ -230,24 +212,15 @@ public class EmployeeCapacityService : IEmployeeCapacityService
 
         var employee = capacities.First().Employee;
 
-        var totalCapacity = capacities.Sum(x => x.Capacity);
+        int assignedHours = await GetEmployeeAssignedHoursAsync(employeeId);
+        int remainingCapacity = 80 - assignedHours;
 
         return new EmployeeCapacitySummaryDto
         {
             EmployeeId = employee.Id,
             EmployeeName = $"{employee.Name} {employee.Surname}",
-            TotalCapacity = totalCapacity,
-            RemainingCapacity = 100 - totalCapacity,
-
-            ProjectCapacities = capacities
-                .Select(x => new ProjectCapacityDto
-                {
-                    ProjectName = x.Project.ProjectName,
-                    Capacity = x.Capacity
-                })
-                .ToList()
+            TotalCapacity = 80, 
+            RemainingCapacity = remainingCapacity < 0 ? 0 : remainingCapacity
         };
     }
-
-
 }

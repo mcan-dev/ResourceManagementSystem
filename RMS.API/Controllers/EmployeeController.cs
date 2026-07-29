@@ -4,35 +4,14 @@ using RMS.ServiceLayer.DTOs;
 
 namespace RMS.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
-    {
-        private readonly IEmployeeService _employeeService;
-
-        public EmployeesController(IEmployeeService employeeService)
-        {
-            _employeeService = employeeService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var employees = await _employeeService.GetAllEmployeesForDropdownAsync();
-            return Ok(employees);
-        }
-    }
-}
-
-/*
+    [Route("api/[controller]")] 
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
         private readonly IEmployeeCapacityService _employeeCapacityService;
 
-        public EmployeeController(
-    IEmployeeService employeeService,
-    IEmployeeCapacityService employeeCapacityService)
+        public EmployeeController(IEmployeeService employeeService, IEmployeeCapacityService employeeCapacityService)
         {
             _employeeService = employeeService;
             _employeeCapacityService = employeeCapacityService;
@@ -42,6 +21,13 @@ namespace RMS.API.Controllers
         public async Task<IActionResult> GetEmployees()
         {
             var employees = await _employeeService.GetAllEmployeesAsync();
+            return Ok(employees);
+        }
+
+        [HttpGet("dropdown")]
+        public async Task<IActionResult> GetEmployeesForDropdown()
+        {
+            var employees = await _employeeService.GetAllEmployeesForDropdownAsync();
             return Ok(employees);
         }
 
@@ -87,17 +73,11 @@ namespace RMS.API.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new
-                {
-                    message = ex.Message
-                });
+                return BadRequest(new { message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new
-                {
-                    message = ex.Message
-                });
+                return Conflict(new { message = ex.Message });
             }
         }
 
@@ -135,6 +115,7 @@ namespace RMS.API.Controllers
             }
             return NoContent();
         }
+
         [HttpGet("{id}/capacity-summary")]
         public async Task<IActionResult> GetEmployeeCapacitySummary(int id)
         {
@@ -147,8 +128,5 @@ namespace RMS.API.Controllers
 
             return Ok(summary);
         }
-
     }
 }
-
-*/

@@ -1,9 +1,7 @@
 <div class="page">
 
-  <h1>Employee & Capacity</h1>
-
   <section class="card">
-    <h2>Employee Management</h2>
+    <h2>Çalışan Yönetimi</h2>
 
     <div class="toolbar">
     <input 
@@ -13,7 +11,7 @@
     (keyup)="applyFilter()" />
 
       <select>
-        <option>All Teams</option>
+        <option>Bütün Takımlar</option>
       </select>
 
       <button
@@ -21,7 +19,7 @@
         color="primary"
         (click)="openAddEmployeeDialog()">
 
-        + New Employee
+        + Yeni Çalışan
 
       </button>
     </div>
@@ -29,42 +27,42 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
 
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <th mat-header-cell *matHeaderCellDef>İsim</th>
     <td mat-cell *matCellDef="let employee">
       {{ employee.name }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="surname">
-    <th mat-header-cell *matHeaderCellDef>Surname</th>
+    <th mat-header-cell *matHeaderCellDef>Soyisim</th>
     <td mat-cell *matCellDef="let employee">
       {{ employee.surname }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="teamName">
-    <th mat-header-cell *matHeaderCellDef>Team</th>
+    <th mat-header-cell *matHeaderCellDef>Takım</th>
     <td mat-cell *matCellDef="let employee">
       {{ employee.teamName }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="titleName">
-    <th mat-header-cell *matHeaderCellDef>Title</th>
+    <th mat-header-cell *matHeaderCellDef>Ünvan</th>
     <td mat-cell *matCellDef="let employee">
       {{ employee.titleName }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <th mat-header-cell *matHeaderCellDef>Durum</th>
     <td mat-cell *matCellDef="let employee">
       {{ employee.status }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <th mat-header-cell *matHeaderCellDef>Aksiyonlar</th>
     <td mat-cell *matCellDef="let employee">
       
     <button mat-icon-button (click)="editEmployee(employee)">
@@ -85,78 +83,68 @@
   </section>
 
  <section class="card">
-  <h2>Capacity Management</h2>
+  <h2>Kapasite Yönetimi</h2>
 
   <div class="capacity-grid">
 
     <!-- SOL KART -->
     <div class="capacity-card">
-
-      <h3>Team Capacity</h3>
-
-      <div
-  *ngFor="let team of teamCapacities"
-  class="team-capacity-item"
-
-  (click)="selectTeam(team.teamId)">
-
-        <div class="team-header">
-          <span>{{ team.teamName }}</span>
-          <span
-    [ngClass]="getCapacityClass(team.averageCapacity)">
-    %{{ team.averageCapacity }}
-</span>
+      <h3>Takım Kapasitesi</h3>
+      
+      <div class="scrollable-list">
+        <div
+          *ngFor="let team of teamCapacities"
+          class="team-capacity-item"
+          (click)="selectTeam(team.teamId)">
+          
+          <div class="team-header">
+            <span>{{ team.teamName }}</span>
+            <span [ngClass]="getCapacityClass(team.averageCapacity)">
+              %{{ team.averageCapacity }}
+            </span>
+          </div>
+          
+          <div class="capacity-progress">
+            <div
+                class="capacity-progress-fill"
+                [style.width.%]="team.averageCapacity"
+                [style.background]="getCapacityColor(team.averageCapacity)">
+            </div>
+          </div>
         </div>
-
-<div class="capacity-progress">
-
-    <div
-        class="capacity-progress-fill"
-        [style.width.%]="team.averageCapacity"
-        [style.background]="getCapacityColor(team.averageCapacity)">
-    </div>
-
-</div>
-
       </div>
-
     </div> 
 
     <!-- SAĞ KART -->
     <div class="capacity-card">
-
-      <h3>Employee Workloads</h3>
-
-     <div *ngFor="let employee of filteredWorkloads"
-     class="team-capacity-item">
-
-        <div class="team-header">
-          <div>
-            <strong>{{ employee.employeeName }}</strong><br>
-            <small>{{ employee.titleName }}</small>
-          </div>
-
-          <span
-          [ngClass]="getCapacityClass(employee.capacity)">
-          %{{ employee.capacity }}
+      <h3>Çalışan İş yükleri</h3>
+      
+      <div class="scrollable-list">
+        <div *ngFor="let employee of filteredWorkloads"
+             class="team-capacity-item">
+             
+          <div class="team-header">
+            <div>
+              <strong>{{ employee.employeeName }}</strong><br>
+              <small>{{ employee.titleName }}</small>
+            </div>
+            <span [ngClass]="getCapacityClass(employee.capacity)">
+              %{{ employee.capacity }}
             </span>
-        </div>    
-
-      <div class="capacity-progress">
-
-          <div
-              class="capacity-progress-fill"
-              [style.width.%]="employee.capacity"
-              [style.background]="getCapacityColor(employee.capacity)">
+          </div>    
+          
+          <div class="capacity-progress">
+            <div
+                class="capacity-progress-fill"
+                [style.width.%]="employee.capacity"
+                [style.background]="getCapacityColor(employee.capacity)">
+            </div>
           </div>
-
+        </div>
       </div>
-
-      </div>
-
     </div>
 
   </div>
-</section>
+ </section>
 
 </div>

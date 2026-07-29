@@ -1,57 +1,136 @@
-<h1 class="page-title">
-    Dashboard
-</h1>
+<div class="dashboard-page" *ngIf="!isLoading && dashboardData">
+  
+  
 
-<!-- Özet Kartlar -->
-<div class="cards">
+  <div class="grid-top">
+    <div class="card stat-card">
+      <div class="stat-header">
+        <mat-icon class="icon-purple">group</mat-icon>
+        <span>Toplam Kapasite</span>
+      </div>
+      <h2>{{ dashboardData.totalCapacityHours }} sa</h2>
+      <p>haftalık • toplam personel</p>
+    </div>
 
-    <mat-card class="card">
-        <h3>Employees</h3>
-        <p>25</p>
-    </mat-card>
+    <div class="card stat-card">
+      <div class="stat-header">
+        <mat-icon class="icon-blue">work_history</mat-icon>
+        <span>Kullanılan Kapasite</span>
+      </div>
+      <h2>{{ dashboardData.usedCapacityHours }} sa</h2>
+      <p>proje tahsisleri</p>
+    </div>
 
-    <mat-card class="card">
-        <h3>Projects</h3>
-        <p>8</p>
-    </mat-card>
+    <div class="card stat-card">
+      <div class="stat-header">
+        <mat-icon class="icon-green">check_circle</mat-icon>
+        <span>Kullanılabilir Kapasite</span>
+      </div>
+      <h2>{{ dashboardData.availableCapacityHours }} sa</h2>
+      <p>yeni işe atanabilir</p>
+    </div>
 
-    <mat-card class="card">
-        <h3>Capacity</h3>
-        <p>%82</p>
-    </mat-card>
+    <div class="card chart-card">
+      <div class="donut-chart" [style.--percentage]="dashboardData.usagePercentage + '%'">
+        <div class="donut-inner">
+          <h3>%{{ dashboardData.usagePercentage }}</h3>
+          <span>kullanım</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <mat-card class="card">
-        <h3>Leave Requests</h3>
-        <p>3</p>
-    </mat-card>
+  <div class="grid-middle">
+    
+    <div class="card">
+      <div class="card-header">
+        <h3>Ekiplere Göre Kapasite</h3>
+        <span class="subtitle">ortalama doluluk</span>
+      </div>
+      <div class="team-list">
+        <div class="team-item" *ngFor="let team of dashboardData.teamCapacities">
+          <div class="team-info">
+            <strong>{{ team.teamName }}</strong>
+            <span>{{ team.employeeCount }} kişi</span>
+          </div>
+          <div class="progress-wrapper">
+            <div class="progress-bg">
+              <div class="progress-fill" 
+                   [style.width.%]="team.averageCapacity"
+                   [style.background]="getProgressBarColor(team.averageCapacity)">
+              </div>
+            </div>
+          </div>
+          <div class="team-val">
+            <strong>%{{ team.averageCapacity }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Yaklaşan Görevler</h3>
+        <span class="subtitle">bitişe göre</span>
+      </div>
+      <div class="task-list">
+        <div class="task-item" *ngFor="let task of dashboardData.upcomingTasks">
+          <div class="task-info">
+            <strong>{{ task.taskName }}</strong>
+            <span>{{ task.projectName }} • {{ task.assignees }}</span>
+          </div>
+          <div class="task-meta">
+            <span class="badge" [ngClass]="getStatusClass(task.statusName)">{{ task.statusName }}</span>
+            <span class="date">{{ task.deadline | date:'dd MMM yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid-bottom">
+    
+    <div class="card mini-card">
+      <div class="mini-icon icon-bg-blue"><mat-icon>folder</mat-icon></div>
+      <div class="mini-content">
+        <span>Yaklaşan Projeler</span>
+        <h2>{{ dashboardData.upcomingProjectsCount }}</h2>
+        <p>14 gün içinde bitecek</p>
+      </div>
+    </div>
+
+    <div class="card mini-card">
+      <div class="mini-icon icon-bg-orange"><mat-icon>flight</mat-icon></div>
+      <div class="mini-content">
+        <span>Bekleyen İzin Talebi</span>
+        <h2>{{ dashboardData.pendingLeaveRequestsCount }}</h2>
+        <p>onay bekliyor</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header border-bottom">
+        <h3 class="text-danger"><mat-icon>warning</mat-icon> Kritik Kapasite</h3>
+        <span class="badge badge-danger-light">&gt;%80</span>
+      </div>
+      <div class="critical-list">
+        <div class="critical-item" *ngFor="let emp of dashboardData.criticalEmployees">
+          <div class="avatar">{{ emp.employeeInitials }}</div>
+          <div class="emp-info">
+            <strong>{{ emp.employeeName }}</strong>
+            <span>{{ emp.titleName }}</span>
+          </div>
+          <div class="emp-val">
+            <strong class="text-danger">%{{ emp.usedCapacityPercentage }}</strong>
+          </div>
+        </div>
+        <div *ngIf="dashboardData.criticalEmployees.length === 0" class="no-data">
+          Kritik seviyede personel bulunmuyor.
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </div>
-
-<!-- Grafik Alanı -->
-<div class="charts">
-
-    <mat-card class="chart-card">
-
-        <h2>Role Capacity</h2>
-
-    </mat-card>
-
-    <mat-card class="usage-card">
-
-    <h2>Usage</h2>
-
-    <apx-chart
-        [series]="chartOptions.series"
-        [chart]="chartOptions.chart"
-        [labels]="chartOptions.labels">
-    </apx-chart>
-
-</mat-card>
-
-</div>
-
-<mat-card class="activity-card">
-
-    <h2>Recent Activities</h2>
-
-</mat-card>

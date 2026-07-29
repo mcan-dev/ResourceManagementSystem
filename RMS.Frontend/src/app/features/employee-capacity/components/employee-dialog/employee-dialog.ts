@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef } from '@angular/material/dialog';
-import { EmployeeService } from '../../../../core/services/employee.service';
+import { EmployeeService } from '../../../../core/services/employee-service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({

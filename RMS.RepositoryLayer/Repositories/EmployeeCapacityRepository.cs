@@ -16,21 +16,9 @@ namespace RMS.RepositoryLayer.Repositories
         {
 
         }
-        public async Task<bool> ExistsAsync(int employeeId, int projectId)
+        public async Task<bool> ExistsAsync(int employeeId)
         {
-            return await _context.EmployeeCapacities.AnyAsync(x =>
-                x.EmployeeId == employeeId &&
-                x.ProjectId == projectId);
-        }
-        public async Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesWithDetailsAsync()
-        {
-            return await _context.EmployeeCapacities
-                .Include(ec => ec.Employee)
-                    .ThenInclude(e => e.Team)
-                .Include(ec => ec.Employee)
-                    .ThenInclude(e => e.Title)
-                .Include(ec => ec.Project)
-                .ToListAsync();
+            return await _context.EmployeeCapacities.AnyAsync(x => x.EmployeeId == employeeId);
         }
 
         public async Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesByTeamAsync(int teamId)
@@ -40,21 +28,31 @@ namespace RMS.RepositoryLayer.Repositories
                     .ThenInclude(e => e.Team)
                 .Include(ec => ec.Employee)
                     .ThenInclude(e => e.Title)
-                .Include(ec => ec.Project)
                 .Where(ec => ec.Employee.TeamId == teamId)
                 .ToListAsync();
         }
 
-        public async Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesByEmployeeAsync(int employeeId){
+        public async Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesWithDetailsAsync()
+        {
             return await _context.EmployeeCapacities
                 .Include(ec => ec.Employee)
                     .ThenInclude(e => e.Team)
                 .Include(ec => ec.Employee)
                     .ThenInclude(e => e.Title)
-                .Include(ec => ec.Project)
+                .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesByEmployeeAsync(int employeeId)
+        {
+            return await _context.EmployeeCapacities
+                .Include(ec => ec.Employee)
+                    .ThenInclude(e => e.Team)
+                .Include(ec => ec.Employee)
+                    .ThenInclude(e => e.Title)
                 .Where(ec => ec.EmployeeId == employeeId)
                 .ToListAsync();
         }
     }
-
 }
+
+

@@ -153,30 +153,6 @@ namespace RMS.ServiceLayer.Services
                 _taskAssignmentRepository.Update(assignment);
             }
 
-            /* 
-            // --- İLERİSİ İÇİN YORUM SATIRI (TASK_PROGRESS) ---
-            // Not: POST (Ekleme) işlemleri tam olarak oturtulduktan sonra bu blok açılacak.
-
-            var progressList = await _taskProgressRepository.FindAsync(p => p.TaskAssignmentId == id); 
-            var progress = progressList.FirstOrDefault();
-
-            if (progress != null)
-            {
-                progress.TotalHours = newHours;
-                progress.LeftHours = newHours - progress.CompletedHours;
-
-                if(progress.LeftHours < 0) progress.LeftHours = 0; 
-
-                if(progress.LeftHours == 0 && progress.CompletedHours > 0)
-                    progress.Status = "Tamamlandı";
-                else if (progress.LeftHours > 0 && progress.Status == "Tamamlandı")
-                    progress.Status = "Devam Ediyor"; 
-
-                _taskProgressRepository.Update(progress); 
-            }
-            */
-
-            // 2. RAM'deki değişikliği veritabanına kaydet (Sadece TaskAssignment güncellenecek)
             await _taskAssignmentRepository.SaveChangesAsync();
         }
 

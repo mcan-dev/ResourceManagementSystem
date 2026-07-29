@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BehaviorSubject, finalize } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-
+import { PageHeaderService } from '../../core/services/page-header';
 import { LeaveRequestService } from '../../core/services/leave-request.service';
 import { LeaveRequestAdminModel } from '../../core/models/leave-request-admin.model';
 
@@ -24,21 +24,11 @@ import { LeaveRequestAdminModel } from '../../core/models/leave-request-admin.mo
   styleUrls: ['./leave-request.scss']
 })
 
-/*
-export class LeaveRequest {
-  constructor(
-      private pageHeaderService: PageHeaderService // Hatanızı çözecek kritik satır
-    ) {}
-  
-    ngOnInit() {
-      
-      this.pageHeaderService.setTitle('İzin Yönetimi');
-    }
-} */
 export class LeaveRequestComponent implements OnInit {
   
   private readonly leaveRequestService = inject(LeaveRequestService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly pageHeaderService = inject(PageHeaderService); // <--- EKLENDİ
 
   private readonly leaveRequestsSubject = new BehaviorSubject<LeaveRequestAdminModel[]>([]);
   readonly leaveRequests$ = this.leaveRequestsSubject.asObservable();
@@ -46,7 +36,6 @@ export class LeaveRequestComponent implements OnInit {
   private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this.isLoadingSubject.asObservable();
 
-  // Görseldeki kolonlara göre güncellendi
   readonly displayedColumns: string[] = [
     'employeeName',
     'leaveTypeName',
@@ -56,8 +45,8 @@ export class LeaveRequestComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.pageHeaderService.setTitle('İzin Yönetimi'); // <--- YORUM KALDIRILDI VE AKTİF EDİLDİ
     this.loadLeaveRequests();
-   // this.pageHeaderService.setTitle('İzin Yönetimi');
   }
 
   loadLeaveRequests(): void {

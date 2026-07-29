@@ -1,3 +1,5 @@
+
+/*
 import { Component } from '@angular/core';
 import { PageHeaderService } from '../../core/services/page-header';
 
@@ -18,3 +20,4 @@ constructor(
     this.pageHeaderService.setTitle('Ekip ve Kapasite Yönetimi');
   }
 }
+  */

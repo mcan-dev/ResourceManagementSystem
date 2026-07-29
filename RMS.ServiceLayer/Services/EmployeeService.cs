@@ -7,10 +7,11 @@ namespace RMS.ServiceLayer;
 public class EmployeeService : IEmployeeService
 {
     private readonly IEmployeeRepository _employeeRepository;
-
-    public EmployeeService(IEmployeeRepository employeeRepository)
+    private readonly IEmployeeCapacityRepository _employeeCapacityRepository;
+    public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeCapacityRepository employeeCapacityRepository)
     {
         _employeeRepository = employeeRepository;
+        _employeeCapacityRepository = employeeCapacityRepository;
     }
 
     public async Task<IReadOnlyList<EmployeeDto>> GetAllEmployeesAsync(CancellationToken cancellationToken = default)
@@ -74,9 +75,21 @@ public class EmployeeService : IEmployeeService
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-
+   
         await _employeeRepository.AddAsync(employee);
         await _employeeRepository.SaveChangesAsync(cancellationToken);
+
+        var defaultCapacity = new EmployeeCapacity
+        {
+            EmployeeId = employee.Id,
+            Capacity = 80, 
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        await _employeeCapacityRepository.AddAsync(defaultCapacity);
+        await _employeeCapacityRepository.SaveChangesAsync(cancellationToken);
+
         return MapToDto(employee);
     }
 

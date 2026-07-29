@@ -137,3 +137,23 @@
     background:#ef4444;
     color:#ef4444;
 }
+
+.scrollable-list {
+  height: 340px; /* İçine çökmesin diye net yükseklik verdik */
+  width: 100%;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px; 
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+  }
+}

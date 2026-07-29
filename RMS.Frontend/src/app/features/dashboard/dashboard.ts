@@ -1,72 +1,60 @@
-import { Component } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+import { MatIconModule } from '@angular/material/icon'; 
+import { DashboardService } from '../../core/services/dashboard-service';
+import { AdminDashboardData } from '../../core/models/dashboard-model';
 import { PageHeaderService } from '../../core/services/page-header';
-/*
-import {
-  NgApexchartsModule,
-  ApexChart,
-  ApexLegend,
-  ApexDataLabels,
-  ApexStroke,
-  ApexNonAxisChartSeries
-} from 'ng-apexcharts';
 
-export type ChartOptions = {
-  series: ApexNonAxisChartSeries;
-  chart: ApexChart;
-  labels: string[];
-  legend: ApexLegend;
-  dataLabels: ApexDataLabels;
-  stroke: ApexStroke;
-  colors: string[];
-};
-*/
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    NgApexchartsModule
-  ],
+  standalone: true, 
+  imports: [CommonModule, MatIconModule], 
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
+  styleUrls: ['./dashboard.scss']
 })
-export class Dashboard {
 
-chartOptions = {
- // public chartOptions: ChartOptions = {
-    series: [82, 18],
-    chart: {
-      type: 'donut',
-      height: 280
-    },
-    labels: [
-      'Used',
-      'Available'
-    ],
+export class Dashboard implements OnInit {
+  dashboardData: AdminDashboardData | null = null;
+  isLoading = true;
 
-    legend: {
-      position: 'bottom'
-    },
+  constructor(private dashboardService: DashboardService,
+    private cdr: ChangeDetectorRef,
+    private pageHeaderService: PageHeaderService
+  ) {}
 
-    dataLabels: {
-      enabled: false
-    },
+  ngOnInit(): void {
+    this.fetchAdminDashboard();
+    this.pageHeaderService.setTitle('Panel');
+  }
 
-    stroke: {
-      width: 0
-    },
+ fetchAdminDashboard(): void {
+    this.dashboardService.getAdminDashboard().subscribe({
+      next: (res: AdminDashboardData) => { 
+        this.dashboardData = res;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => { 
+        console.error('Dashboard verisi çekilemedi:', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
-    colors: [
-      '#2563eb',
-      '#e5e7eb'
-    ]
-  };
-   constructor(private pageHeaderService: PageHeaderService) {}
+  getStatusClass(status: string): string {
+    switch(status.toLowerCase()) {
+      case 'devam ediyor': return 'badge-primary';
+      case 'beklemede': return 'badge-warning';
+      case 'başlamadı': return 'badge-secondary';
+      case 'tamamlandı': return 'badge-success';
+      default: return 'badge-secondary';
+    }
+  }
 
-  ngOnInit() {
-  
-    this.pageHeaderService.setTitle('Dashboard')
+  getProgressBarColor(percentage: number): string {
+    if (percentage >= 80) return '#ef4444'; 
+    if (percentage >= 50) return '#f59e0b'; 
+    return '#22c55e'; 
   }
 }

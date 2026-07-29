@@ -33,7 +33,6 @@ namespace RMS.ServiceLayer.DTOs;
     {
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; } = string.Empty;
-        public string ProjectName { get; set; } = string.Empty;
         public int Capacity { get; set; }
         
     }
@@ -45,18 +44,12 @@ public class EmployeeCapacityDto
 
     public string EmployeeName { get; set; } = string.Empty;
 
-    public int ProjectId { get; set; }
-
-    public string ProjectName { get; set; } = string.Empty;
-
     public int Capacity { get; set; }
 }
 
 public class CreateEmployeeCapacityRequest
 {
     public int EmployeeId { get; set; }
-
-    public int ProjectId { get; set; }
 
     public int Capacity { get; set; }
 }
@@ -65,12 +58,7 @@ public class UpdateEmployeeCapacityRequest
 {
     public int Capacity { get; set; }
 }
-public class ProjectCapacityDto
-{
-    public string ProjectName { get; set; } = string.Empty;
 
-    public int Capacity { get; set; }
-}
 public class EmployeeCapacitySummaryDto
 {
     public int EmployeeId { get; set; }
@@ -81,7 +69,6 @@ public class EmployeeCapacitySummaryDto
 
     public int RemainingCapacity { get; set; }
 
-    public List<ProjectCapacityDto> ProjectCapacities { get; set; } = new();
 }
 
 

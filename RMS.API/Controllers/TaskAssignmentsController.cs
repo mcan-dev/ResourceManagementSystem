@@ -70,7 +70,7 @@ namespace RMS.API.Controllers
         [HttpPut("update-progress")]
         public async Task<IActionResult> UpdateEmployeeProgress([FromBody] UpdateEmployeeProgressDto dto)
         {
-            // Gelen verinin doğruluğunu kontrol et
+           
             if (dto.CompletedHours < 0)
                 return BadRequest("Tamamlanan saat 0'dan küçük olamaz.");
 

@@ -5,12 +5,12 @@
 <form [formGroup]="employeeForm">
 
   <mat-form-field appearance="outline">
-    <mat-label>Name</mat-label>
+    <mat-label>İsim</mat-label>
     <input matInput formControlName="name">
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Surname</mat-label>
+    <mat-label>Soyisim</mat-label>
     <input matInput formControlName="surname">
   </mat-form-field>
 
@@ -20,7 +20,7 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Status</mat-label>
+    <mat-label>Durum</mat-label>
     <mat-select formControlName="status">
       <mat-option value="aktif">Aktif</mat-option>
       <mat-option value="pasif">Pasif</mat-option>
@@ -28,7 +28,7 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-  <mat-label>Team</mat-label>
+  <mat-label>Takım</mat-label>
 
   <mat-select formControlName="teamId">
     <mat-option [value]="1">Yasal Takip</mat-option>
@@ -38,7 +38,7 @@
 </mat-form-field>
 
 <mat-form-field appearance="outline">
-  <mat-label>Title</mat-label>
+  <mat-label>Ünvan</mat-label>
 
   <mat-select formControlName="titleId">
     <mat-option [value]="1">Yazılımcı</mat-option>
@@ -52,7 +52,7 @@
 </mat-form-field>
 
 <mat-form-field appearance="outline">
-  <mat-label>Gender</mat-label>
+  <mat-label>Cinsiyet</mat-label>
 
   <mat-select formControlName="gender">
     <mat-option value="Kadın">Kadın</mat-option>
@@ -71,7 +71,7 @@
   mat-button
   (click)="cancel()">
 
-  Cancel
+  Vazgeç
 
 </button>
 
@@ -80,7 +80,7 @@
   color="primary"
   (click)="save()">
 
-  Save
+  Kaydet
 
 </button>
 

@@ -15,6 +15,5 @@ public interface IEmployeeService
     Task<EmployeeDto> CreateEmployeeAsync(CreateEmployeeRequest request, CancellationToken cancellationToken = default);
     Task<EmployeeDto?> UpdateEmployeeAsync(int id, UpdateEmployeeRequest request, CancellationToken cancellationToken = default);
     Task<bool> DeleteEmployeeAsync(int id, CancellationToken cancellationToken = default);
-
     Task<IEnumerable<EmployeeListDto>> GetAllEmployeesForDropdownAsync();
 }

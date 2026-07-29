@@ -14,5 +14,6 @@ public interface IEmployeeCapacityRepository : IGenericRepository<EmployeeCapaci
     Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesByTeamAsync(int teamId);
 
     Task<IReadOnlyList<EmployeeCapacity>> GetEmployeeCapacitiesByEmployeeAsync(int employeeId);
-    Task<bool> ExistsAsync(int employeeId, int projectId);
+
+    Task<bool> ExistsAsync(int employeeId);
 }

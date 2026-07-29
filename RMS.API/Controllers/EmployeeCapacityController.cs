@@ -36,11 +36,10 @@ public class EmployeeCapacityController : ControllerBase
     }
     [HttpGet]
     public async Task<IActionResult> GetCapacities(
-    [FromQuery] int? projectId,
     [FromQuery] int? employeeId)
     {
         var capacities = await _employeeCapacityService
-            .GetCapacitiesAsync(projectId, employeeId);
+            .GetCapacitiesAsync(employeeId);
 
         return Ok(capacities);
     }

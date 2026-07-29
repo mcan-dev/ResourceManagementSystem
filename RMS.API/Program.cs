@@ -37,6 +37,7 @@ builder.Services.AddScoped<IWorkCalendarRepository, WorkCalendarRepository>();
 builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 builder.Services.AddScoped<IEmployeeCapacityService, EmployeeCapacityService>();
 builder.Services.AddScoped<ICalendarService, CalendarService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddDbContext<RmsContext>(options =>
 
 

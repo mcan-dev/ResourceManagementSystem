@@ -23,8 +23,6 @@ public partial class Project
 
     public string? ProjectDescription { get; set; }
 
-    public virtual ICollection<EmployeeCapacity> EmployeeCapacities { get; set; } = new List<EmployeeCapacity>();
-
     public virtual Priority? Priority { get; set; }
 
     public virtual ICollection<ProjectEmployee> ProjectEmployees { get; set; } = new List<ProjectEmployee>();

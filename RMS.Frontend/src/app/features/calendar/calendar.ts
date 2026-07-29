@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BehaviorSubject, Observable, catchError, finalize, map, of } from 'rxjs';
-
+import { PageHeaderService } from '../../core/services/page-header';
 import { CalendarService } from '../../core/services/calendar.service';
 import { CalendarResponse } from '../../core/models/calendar-response.model';
 
@@ -24,8 +24,12 @@ export interface CalendarDayUI {
   templateUrl: './calendar.html',
   styleUrls: ['./calendar.scss']
 })
+
 export class CalendarComponent implements OnInit {
+  constructor() { }
+
   private readonly calendarService = inject(CalendarService);
+  private readonly pageHeaderService = inject(PageHeaderService); // <--- EKLENDİ
 
   private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
   readonly isLoading$: Observable<boolean> = this.isLoadingSubject.asObservable();
@@ -47,6 +51,7 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.pageHeaderService.setTitle('Takvim'); // <--- EKLENDİ
     this.loadCalendar(this.currentYear, this.currentMonth);
   }
 

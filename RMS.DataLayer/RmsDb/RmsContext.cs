@@ -122,14 +122,11 @@ public partial class RmsContext : DbContext
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_employees_title_id");
         });
-
         modelBuilder.Entity<EmployeeCapacity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__employee__3213E83FAC83F20A");
 
             entity.ToTable("employee_capacities");
-
-            entity.HasIndex(e => new { e.EmployeeId, e.ProjectId }, "uq_employee_capacities_employee_project").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Capacity).HasColumnName("capacity");
@@ -137,7 +134,6 @@ public partial class RmsContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnName("created_at");
             entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
-            entity.Property(e => e.ProjectId).HasColumnName("project_id");
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnName("updated_at");
@@ -145,10 +141,6 @@ public partial class RmsContext : DbContext
             entity.HasOne(d => d.Employee).WithMany(p => p.EmployeeCapacities)
                 .HasForeignKey(d => d.EmployeeId)
                 .HasConstraintName("fk_employee_capacities_employee_id");
-
-            entity.HasOne(d => d.Project).WithMany(p => p.EmployeeCapacities)
-                .HasForeignKey(d => d.ProjectId)
-                .HasConstraintName("fk_employee_capacities_project_id");
         });
 
         modelBuilder.Entity<EmployeePriority>(entity =>

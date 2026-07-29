@@ -28,14 +28,14 @@ namespace RMS.ServiceLayer.Services
 
             var projectCards = projects.Select(p =>
             {
-                // --- YENİ EKLENEN KISIM: Görevlerdeki saatleri baştan topluyoruz ---
+              
                 var allAssignments = p.ProjectTasks != null
                     ? p.ProjectTasks.SelectMany(t => t.TaskAssignments ?? new List<TaskAssignment>()).ToList()
                     : new List<TaskAssignment>();
 
                 decimal totalAssigned = allAssignments.Sum(a => a.AssignedHours != null ? Convert.ToDecimal(a.AssignedHours) : 0);
                 decimal totalCompleted = allAssignments.Sum(a => a.CompletedHours != null ? Convert.ToDecimal(a.CompletedHours) : 0);
-                // -------------------------------------------------------------------
+                
 
                 return new ProjectCardListDto
                 {
