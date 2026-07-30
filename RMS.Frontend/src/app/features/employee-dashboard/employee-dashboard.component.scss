@@ -1,0 +1,256 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  background-color: #f8fafc;
+  min-height: calc(100vh - 70px);
+
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
+  }
+
+  .grid-top {
+    display: grid;
+    grid-template-columns: 280px repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .grid-middle {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // --- ÜST İSTATİSTİK KARTLARI ---
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+
+      mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+        &.icon-blue { color: #3b82f6; }
+        &.icon-purple { color: #8b5cf6; }
+        &.icon-orange { color: #f97316; }
+      }
+
+      span {
+        font-size: 14px;
+        color: #64748b;
+        font-weight: 500;
+      }
+    }
+
+    h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 26px;
+      color: #131A2A;
+      font-weight: 700;
+      margin: 6px 0px 8px 0px;
+    }
+
+    p {
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 400;
+      margin: 0;
+    }
+  }
+
+  // --- DONUT CHART (KAPASİTE) ---
+  .chart-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+
+    .donut-chart {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: conic-gradient(#4f46e5 var(--percentage), #e2e8f0 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .donut-inner {
+        width: 105px;
+        height: 105px;
+        background: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        h3 {
+          font-family: 'Sora', sans-serif;
+          font-size: 24px;
+          font-weight: 700;
+          color: #0f172a;
+          margin: 0;
+        }
+
+        span {
+          font-size: 12px;
+          color: #64748b;
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+
+  // --- KART BAŞLIKLARI ---
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    &.border-bottom {
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 16px;
+    }
+
+    h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  }
+
+  // --- GÖREV LİSTESİ ---
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f8fafc;
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .task-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        strong { font-size: 14px; color: #1e293b; font-weight: 600; }
+        span { font-size: 12px; color: #64748b; }
+      }
+
+      .task-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        .date {
+          font-size: 12px;
+          color: #64748b;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  // --- PROJE KAPASİTE LİSTESİ ---
+  .team-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 10px;
+
+    .team-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .team-info {
+        flex: 0 0 140px;
+        display: flex;
+        flex-direction: column;
+        
+        strong { font-size: 14px; color: #0f172a; font-weight: 600; }
+      }
+
+      .progress-wrapper {
+        flex: 1;
+        .progress-bg {
+          width: 100%;
+          height: 10px;
+          background: #f1f5f9;
+          border-radius: 10px;
+          overflow: hidden;
+        }
+        .progress-fill {
+          height: 100%;
+          border-radius: 10px;
+          transition: width 0.5s ease-in-out;
+        }
+      }
+
+      .team-val {
+        flex: 0 0 45px;
+        text-align: right;
+        strong { font-size: 14px; font-weight: 700; }
+      }
+    }
+  }
+
+  // --- ETİKETLER (BADGE) ---
+  .badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+
+    &.badge-blue { background: #eff6ff; color: #3b82f6; }
+    &.badge-orange { background: #fff7ed; color: #f97316; }
+    &.badge-gray { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+    &.badge-green { background: #f0fdf4; color: #22c55e; }
+  }
+
+  .no-data {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+    padding: 20px 0;
+  }
+}

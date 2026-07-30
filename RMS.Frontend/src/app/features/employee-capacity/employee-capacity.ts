@@ -198,8 +198,8 @@ export class EmployeeCapacity implements OnInit {
   }
 
   getCapacityColor(capacity: number): string {
-    if (capacity >= 90) return '#ef4444';  
-    if (capacity >= 0) return '#f59e0b';   
+    if (capacity >= 85) return '#ef4444';  
+    if (capacity >= 50) return '#f59e0b';   
     if (capacity >= 25) return '#2c24d1';  
     return '#22c55e';  
   }

@@ -66,7 +66,7 @@ export class Login {
           this.router.navigate(['/dashboard']); 
         } else {
           
-          this.router.navigate(['/dashboard']); 
+          this.router.navigate(['/employee-dashboard']); 
         }
       },
       error: (error) => {

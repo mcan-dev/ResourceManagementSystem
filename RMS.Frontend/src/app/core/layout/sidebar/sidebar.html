@@ -45,9 +45,10 @@
     <!-- ========================================== -->
     <!-- PERSONEL MENÜSÜ                            -->
     <!-- ========================================== -->
-    <ng-container *ngIf="userRole === 'Personel'|| userRole === 'Çalışan'">
-      <!-- Personel için rotaları kendi yapılandırmanıza göre güncelleyebilirsiniz -->
-      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+   <ng-container *ngIf="userRole === 'Personel'|| userRole === 'Çalışan'">
+      
+      <!-- İŞTE BURAYI DÜZELTTİK: /employee-dashboard oldu -->
+      <a routerLink="/employee-dashboard" routerLinkActive="active" class="menu-item">
         <i class="fa-solid fa-border-all"></i>
         <span>Panel</span>
       </a>

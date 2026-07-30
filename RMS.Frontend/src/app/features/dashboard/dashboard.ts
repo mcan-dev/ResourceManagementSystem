@@ -30,6 +30,13 @@ export class Dashboard implements OnInit {
  fetchAdminDashboard(): void {
     this.dashboardService.getAdminDashboard().subscribe({
       next: (res: AdminDashboardData) => { 
+        if (res.teamCapacities) {
+          res.teamCapacities = res.teamCapacities.map(team => {
+            const usedHours = 80 - team.averageCapacity; 
+            team.averageCapacity = Math.round((usedHours / 80) * 100); 
+            return team;
+          });
+        }
         this.dashboardData = res;
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -52,9 +59,10 @@ export class Dashboard implements OnInit {
     }
   }
 
-  getProgressBarColor(percentage: number): string {
-    if (percentage >= 80) return '#ef4444'; 
+ getProgressBarColor(percentage: number): string {
+    if (percentage >= 85) return '#ef4444'; 
     if (percentage >= 50) return '#f59e0b'; 
-    return '#22c55e'; 
+    if (percentage >= 25) return '#2c24d1'; 
+    return '#22c55e';                      
   }
 }

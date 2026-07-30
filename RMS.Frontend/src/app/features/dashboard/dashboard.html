@@ -8,7 +8,7 @@
         <mat-icon class="icon-purple">group</mat-icon>
         <span>Toplam Kapasite</span>
       </div>
-      <h2>{{ dashboardData.totalCapacityHours }} sa</h2>
+      <h2>{{ dashboardData.totalCapacityHours }} saat</h2>
       <p>haftalık • toplam personel</p>
     </div>
 
@@ -17,7 +17,7 @@
         <mat-icon class="icon-blue">work_history</mat-icon>
         <span>Kullanılan Kapasite</span>
       </div>
-      <h2>{{ dashboardData.usedCapacityHours }} sa</h2>
+      <h2>{{ dashboardData.usedCapacityHours }} saat</h2>
       <p>proje tahsisleri</p>
     </div>
 
@@ -26,7 +26,7 @@
         <mat-icon class="icon-green">check_circle</mat-icon>
         <span>Kullanılabilir Kapasite</span>
       </div>
-      <h2>{{ dashboardData.availableCapacityHours }} sa</h2>
+      <h2>{{ dashboardData.availableCapacityHours }} saat</h2>
       <p>yeni işe atanabilir</p>
     </div>
 
@@ -62,7 +62,8 @@
             </div>
           </div>
           <div class="team-val">
-            <strong>%{{ team.averageCapacity }}</strong>
+            <!-- Rengi bar rengiyle uyumlu hale getirdik -->
+            <strong [style.color]="getProgressBarColor(team.averageCapacity)">%{{ team.averageCapacity }}</strong>
           </div>
         </div>
       </div>
