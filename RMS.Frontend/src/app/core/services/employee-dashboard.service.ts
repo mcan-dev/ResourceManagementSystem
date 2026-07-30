@@ -18,4 +18,6 @@ export class EmployeeDashboardService {
   getEmployeeDashboard(employeeId: number): Observable<EmployeeDashboardData> {
     return this.http.get<EmployeeDashboardData>(`${this.apiUrl}/Dashboard/employee/${employeeId}`);
   }
+
+  /*  Buraya ve ya yeni bir emplooye_leave_request_service oluşturulup onla çalıştırılacak */
 }

@@ -1,0 +1,41 @@
+.settings-container {
+  padding: 24px;
+}
+
+.cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.settings-card {
+  border-radius: 8px;
+  
+  mat-card-header {
+    margin-bottom: 16px;
+  }
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  button {
+    min-width: 140px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

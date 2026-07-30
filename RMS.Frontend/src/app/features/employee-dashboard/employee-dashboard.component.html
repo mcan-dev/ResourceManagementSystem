@@ -1,10 +1,15 @@
-<div class="dashboard-page" *ngIf="!isLoading && dashboardData" style="width: 100%;">
+<div *ngIf="isLoading" class="no-data">
+  <p>Veriler yükleniyor, lütfen bekleyin...</p>
+</div>
+
+<!-- Ana İçerik -->
+<div class="dashboard-page" *ngIf="!isLoading && dashboardData">
   
-  <!-- ÜST KARTLAR (3'lü Yapı - Ekrana Eşit Dağılım) -->
-  <div class="grid-top" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%;">
+  <!-- ÜST KARTLAR (3'lü Yapı) -->
+  <div class="grid-top">
     
     <!-- Kapasite Grafiği -->
-    <div class="card chart-card" style="width: 100%;">
+    <div class="card chart-card">
       <div class="donut-chart" [style.--percentage]="dashboardData.usedCapacityPercentage + '%'">
         <div class="donut-inner">
           <h3>%{{ dashboardData.usedCapacityPercentage }}</h3>
@@ -14,7 +19,7 @@
     </div>
 
     <!-- Aktif Görevlerim -->
-    <div class="card stat-card" style="width: 100%;">
+    <div class="card stat-card">
       <div class="stat-header">
         <mat-icon class="icon-blue">task_alt</mat-icon>
         <span>Aktif Görevlerim</span>
@@ -24,7 +29,7 @@
     </div>
 
     <!-- Projelerim -->
-    <div class="card stat-card" style="width: 100%;">
+    <div class="card stat-card">
       <div class="stat-header">
         <mat-icon class="icon-purple">folder</mat-icon>
         <span>Projelerim</span>
@@ -36,10 +41,10 @@
   </div>
 
   <!-- ALT KARTLAR (%70 Sol: Görevler, %30 Sağ: İzin Talepleri) -->
-  <div class="grid-middle" style="display: grid; grid-template-columns: 7fr 3fr; gap: 20px; width: 100%; margin-top: 20px;">
+  <div class="grid-middle">
     
-    <!-- Yaklaşan Görevlerim (Sol - %70 Geniş Kısım) -->
-    <div class="card" style="width: 100%;">
+    <!-- Yaklaşan Görevlerim (Sol) -->
+    <div class="card">
       <div class="card-header border-bottom">
         <h3>Yaklaşan Görevlerim</h3>
       </div>
@@ -54,22 +59,24 @@
             <span class="date">{{ task.deadline | date:'dd MMM yyyy' }}</span>
           </div>
         </div>
+        
+        <!-- Veri yoksa -->
         <div *ngIf="dashboardData.upcomingTasks.length === 0" class="no-data">
           Yaklaşan aktif göreviniz bulunmuyor.
         </div>
       </div>
     </div>
 
-    <!-- İzin Talepleri (Sağ - %30 Dar Kısım) -->
-    <div class="card stat-card leave-block" style="display: flex; flex-direction: column; justify-content: center; width: 100%;">
-      <div class="stat-header border-bottom" style="padding-bottom: 15px; margin-bottom: 20px;">
-        <mat-icon class="icon-orange">flight</mat-icon>
-        <span style="font-weight: 600;">Bekleyen İzin Talebi</span>
+    <!-- İzin Talepleri (Sağ) -->
+   <div class="card custom-leave-card">
+      <div class="stat-header">
+        <div class="icon-box">
+          <mat-icon>flight</mat-icon>
+        </div>
+        <span>İzin Taleplerim</span>
       </div>
-      <div style="text-align: center;">
-        <h1 style="font-size: 3.5rem; margin: 0; color: #1e293b;">{{ dashboardData.pendingLeaveRequestsCount }}</h1>
-        <p style="color: #64748b; font-size: 1.1rem; margin-top: 5px;">onay bekliyor</p>
-      </div>
+      <h2>{{ dashboardData.pendingLeaveRequestsCount }}</h2>
+      <p>onay bekleyen</p>
     </div>
 
   </div>

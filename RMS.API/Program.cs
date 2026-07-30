@@ -38,6 +38,8 @@ builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 builder.Services.AddScoped<IEmployeeCapacityService, EmployeeCapacityService>();
 builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
+
 builder.Services.AddDbContext<RmsContext>(options =>
 
 
@@ -58,7 +60,7 @@ builder.Services.AddCors(options =>
 Console.WriteLine("Connection String:");
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
-// Program.cs i�erisine ekle (builder.Build() sat�r�ndan �nce)
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
