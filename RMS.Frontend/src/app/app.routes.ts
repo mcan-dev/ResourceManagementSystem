@@ -29,7 +29,6 @@ export const routes: Routes = [
         path: 'dashboard',
         component: Dashboard
       },
-      // İŞTE BURAYA TAŞIDIK! Artık yan menüyle birlikte açılacak.
       { 
         path: 'employee-dashboard', 
         component: EmployeeDashboardComponent 

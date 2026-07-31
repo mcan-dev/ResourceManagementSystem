@@ -1,21 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router'; // Router buraya eklendi
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, 
+  imports: [
+    RouterLink, 
     CommonModule, 
     RouterModule,
-    RouterLinkActive],
+    RouterLinkActive
+  ],
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.scss']
 })
-export class Sidebar implements OnInit{userRole: string = '';
+export class Sidebar implements OnInit {
+  userRole: string = '';
   Role: string = '';
   userName: string = '';
   userInitials: string = '';
+
+  // Router'ı kullanabilmek için constructor içine enjekte ettik
+  constructor(private router: Router) {}
 
   ngOnInit() {
     // Tarayıcıdan giriş yapan kullanıcının bilgilerini çekiyoruz
@@ -33,5 +39,15 @@ export class Sidebar implements OnInit{userRole: string = '';
     } else {
       this.userInitials = 'DK';
     }
+  }
+
+  // ÇIKIŞ YAP FONKSİYONU
+  logout(): void {
+    // Oturum verilerini temizle
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Giriş sayfasına yönlendir
+    this.router.navigate(['/login']);
   }
 }

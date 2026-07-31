@@ -74,7 +74,7 @@ const employee = {
   teamId: this.employeeForm.value.teamId,
   titleId: this.employeeForm.value.titleId,
 
-  username: this.employeeForm.value.email, // veya farklı benzersiz bir değer
+  username: this.employeeForm.value.email, 
 
   password: null,
   userRole: 'Çalışan',

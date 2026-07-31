@@ -1,12 +1,12 @@
 export interface LeaveRequestModel {
   id: number;
   employeeId: number;
-  startDate: string; // ISO 8601 format (YYYY-MM-DD)
-  endDate: string; // ISO 8601 format
+  startDate: string;
+  endDate: string; 
   leaveTypeId: number;
-  leaveTypeName?: string; // UI'da göstermek için (opsiyonel)
+  leaveTypeName?: string; 
   statusId: number;
-  statusName?: string; // UI'da göstermek için (opsiyonel)
+  statusName?: string;
   description: string;
   createdAt: string;
 }

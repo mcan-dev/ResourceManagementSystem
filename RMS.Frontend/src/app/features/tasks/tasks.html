@@ -8,16 +8,15 @@
     </div>
     
     <div class="filters">
-      <!-- name ve id eklendi -->
       <select name="statusFilter" id="statusFilter"><option>Durum: Tümü</option></select>
       <select name="projectFilter" id="projectFilter"><option>Proje: Tümü</option></select>
       <select name="teamFilter" id="teamFilter"><option>Ekip: Tümü</option></select>
     </div>
-<button *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'" 
-          class="btn-new-task" 
-          (click)="openNewTaskModal()">
-    + Yeni Görev
-  </button>
+    <button *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'" 
+            class="btn-new-task" 
+            (click)="openNewTaskModal()">
+      + Yeni Görev
+    </button>
   </div>
 
   <!-- Görev Tablosu -->
@@ -48,22 +47,15 @@
             <div class="project-name">{{ task?.projectName }}</div>
           </td>
 
-          <!-- 2. Atamalar (Birden fazla kişi yan yana) -->
-          <td class="assignees-cell">
+        <td class="assignees-cell">
             <div class="assignee-badges">
               <span class="badge assignee" *ngFor="let assignee of task?.assignees || []">
-                <!-- İsmin sadece ilk kelimesini alıyoruz ki tasarım hap şeklinde şık dursun -->
                 {{ (assignee?.employeeName || '').split(' ')[0] }} · {{ assignee?.assignedHours }}sa
               </span>
             </div>
           </td>
 
-          <!-- 3. Durum Rozeti -->
-          <td>
-            <span class="badge status" [ngClass]="getStatusClass(task?.taskStatus || '')">
-              {{ task?.taskStatus }}
-            </span>
-          </td>
+         
           
           <!-- 4. Tarihler -->
           <td class="date-cell">
@@ -71,229 +63,234 @@
             <div>{{ task?.endDate | date:'d MMM yyyy' }}</div>
           </td>
             
-        <td class="progress-cell">
-  <div class="progress-bar-bg">
-    <!-- İlerleme çubuğunun genişliğini (yüzdesini) hesaplıyoruz -->
-    <div class="progress-bar-fill" 
-         [style.width.%]="task?.totalAssignedHours ? (task?.totalCompletedHours / task?.totalAssignedHours * 100) : (task?.assignedHours ? (task?.completedHours / task?.assignedHours * 100) : 0)">
-    </div>
-  </div>
-  
-  <div class="progress-text">
-    {{ task?.totalCompletedHours || task?.completedHours || 0 }}/{{ task?.totalAssignedHours || task?.assignedHours || 0 }} sa · 
-    %{{ (task?.totalAssignedHours ? (task?.totalCompletedHours / task?.totalAssignedHours * 100) : (task?.assignedHours ? (task?.completedHours / task?.assignedHours * 100) : 0)) | number:'1.0-0' }}
-  </div>
-</td>
+          <td class="progress-cell">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" 
+                   [style.width.%]="task?.totalAssignedHours ? (task?.totalCompletedHours / task?.totalAssignedHours * 100) : (task?.assignedHours ? (task?.completedHours / task?.assignedHours * 100) : 0)">
+              </div>
+            </div>
+            <div class="progress-text">
+              {{ task?.totalCompletedHours || task?.completedHours || 0 }}/{{ task?.totalAssignedHours || task?.assignedHours || 0 }} sa · 
+              %{{ (task?.totalAssignedHours ? (task?.totalCompletedHours / task?.totalAssignedHours * 100) : (task?.assignedHours ? (task?.completedHours / task?.assignedHours * 100) : 0)) | number:'1.0-0' }}
+            </div>
+          </td>
+
           <td class="action-cell">
-              
               <button class="btn-manage" (click)="openManageModal(task)"> Yönet </button>
-              
               <button *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'" 
                       class="btn-delete" 
                       (click)="deleteTask(task.taskId)">
                 Sil 
               </button>
-            </td>
-                  </tr>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-<!-- GÖREV YÖNETİM MODALI -->
-<div class="modal-overlay" *ngIf="isManageModalOpen && selectedManageTask">
-  <div class="modal-content" style="max-width: 600px; min-height: 550px; display: flex; flex-direction: column;">
-    
-    <!-- Üst Başlık -->
-    <div class="modal-header">
-      <h2>Görev: {{ selectedManageTask.taskName }}</h2>
-      <button class="close-btn" (click)="closeManageModal()">✕</button>
-    </div>
+  <!-- GÖREV YÖNETİM MODALI -->
+  <div class="modal-overlay" *ngIf="isManageModalOpen && selectedManageTask">
+    <div class="modal-content" style="max-width: 600px; min-height: 550px; display: flex; flex-direction: column;">
+      
+      <!-- Üst Başlık -->
+      <div class="modal-header">
+        <h2>Görev: {{ selectedManageTask.taskName }}</h2>
+        <button class="close-btn" (click)="closeManageModal()">✕</button>
+      </div>
 
-    <!-- Gövde -->
-    <div class="modal-body" style="flex: 1; padding: 20px;">
-      <p style="color: gray; font-size: 13.5px; margin-top: -10px; margin-bottom: 20px;">
-        {{ selectedManageTask.projectName }} • {{ selectedManageTask.startDate | date:'dd MMM yyyy' }} - {{ selectedManageTask.endDate | date:'dd MMM yyyy' }}
-      </p>
+      <!-- Gövde -->
+      <div class="modal-body" style="flex: 1; padding: 20px;">
+        <p style="color: gray; font-size: 13.5px; margin-top: -10px; margin-bottom: 20px;">
+          {{ selectedManageTask.projectName }} • {{ selectedManageTask.startDate | date:'dd MMM yyyy' }} - {{ selectedManageTask.endDate | date:'dd MMM yyyy' }}
+        </p>
 
-      <!-- ========================================== -->
-      <!-- 1. YÖNETİCİ GÖRÜNÜMÜ                       -->
-      <!-- ========================================== -->
-      <ng-container *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'">
-        
-        <!-- MEVCUT ATAMALAR LİSTESİ -->
-        <div class="assignment-section" style="background-color: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-          <label class="section-title" style="display: block; font-size: 12px; font-weight: bold; color: #777; margin-bottom: 10px;">ATAMALAR VE İLERLEME</label>
+        <!-- ========================================== -->
+        <!-- 1. YÖNETİCİ GÖRÜNÜMÜ                       -->
+        <!-- ========================================== -->
+        <ng-container *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'">
           
-          <div *ngIf="!selectedManageTask.assignees || selectedManageTask.assignees.length === 0" style="color: gray; font-size: 13.5px; padding: 10px 0;">
-            Bu göreve henüz atanmış bir personel bulunmuyor.
-          </div>
-
-          <!-- Atanan Kişiler Döngüsü -->
-          <div *ngFor="let assignment of selectedManageTask.assignees" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <div style="background-color: #4f46e5; color: white; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
-                {{ getInitials(assignment.employeeName) }}
-              </div>
-              <div>
-                <div style="font-weight: 600; color: #333; margin-bottom: 2px;">{{ assignment.employeeName }}</div>
-                <div style="font-size: 12.5px; color: gray;">Atanan: {{ assignment.assignedHours }} sa • Tamamlanan: {{ assignment.completedHours || 0 }} sa</div>
-              </div>
-            </div>
-            <!-- Gerekirse buraya yönetici için saat güncelleme/silme butonları gelebilir -->
-          </div>
-        </div>
-
-        <!-- GÖREVE PERSONEL ATA -->
-        <div class="assign-section" style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px;">
-          <label class="section-title" style="display: block; font-size: 12px; font-weight: bold; color: #777; margin-bottom: 10px;">GÖREVE PERSONEL ATA</label>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <select [(ngModel)]="newManageAssignment.employeeId" style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
-              <option value="0" disabled>Personel Seç</option>
-              <option *ngFor="let emp of employees" [value]="emp.id">{{ emp.fullName }}</option>
-            </select>
-            <input type="number" placeholder="Saat" [(ngModel)]="newManageAssignment.assignedHours" style="width: 80px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
-            <button (click)="addNewTaskAssignment()" style="background-color: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer;">+ Ata</button>
-          </div>
-          <p style="font-size: 11px; color: #9ca3af; margin-top: 8px;">Tüm personeller arasından seçim yapabilirsiniz.</p>
-        </div>
-
-      </ng-container>
-
-
-      <!-- ========================================== -->
-      <!-- 2. ÇALIŞAN GÖRÜNÜMÜ                        -->
-      <!-- ========================================== -->
-      <ng-container *ngIf="userRole === 'Çalışan'">
-        
-        <div class="assignment-section" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
-          <label class="section-title" style="display: block; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 15px;">İLERLEME DURUMUM</label>
-          
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+          <!-- MEVCUT ATAMALAR LİSTESİ -->
+          <div class="assignment-section" style="background-color: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+            <label class="section-title" style="display: block; font-size: 12px; font-weight: bold; color: #777; margin-bottom: 10px;">ATAMALAR VE İLERLEME</label>
             
-            <!-- Çalışan Bilgileri -->
-            <div style="display: flex; align-items: center; gap: 15px;">
-              <div style="background-color: #4f46e5; color: white; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">
-                {{ getInitials(userName) }}
-              </div>
-              <div>
-                <div style="font-weight: 600; color: #1e293b; font-size: 15px; margin-bottom: 4px;">{{ userName }}</div>
-                <div style="font-size: 13px; color: #64748b;">
-                  Atanan: <strong>{{ selectedManageTask.assignedHours || 0 }} sa</strong> • 
-                  Tamamlanan: <strong>{{ selectedManageTask.completedHours || 0 }} sa</strong>
+            <div *ngIf="!selectedManageTask.assignees || selectedManageTask.assignees.length === 0" style="color: gray; font-size: 13.5px; padding: 10px 0;">
+              Bu göreve henüz atanmış bir personel bulunmuyor.
+            </div>
+
+            <!-- Atanan Kişiler Döngüsü -->
+            <div *ngFor="let assignment of selectedManageTask.assignees" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background-color: #4f46e5; color: white; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+                  {{ getInitials(assignment.employeeName) }}
+                </div>
+                <div>
+                  <div style="font-weight: 600; color: #333; margin-bottom: 2px;">{{ assignment.employeeName }}</div>
+                  <div style="font-size: 12.5px; color: gray;">Atanan: {{ assignment.assignedHours }} sa • Tamamlanan: {{ assignment.completedHours || 0 }} sa</div>
                 </div>
               </div>
-            </div>
-
-            <!-- Saat Güncelleme Aksiyonu -->
-            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-              <input type="number" 
-                     [(ngModel)]="newCompletedHours" 
-                     placeholder="Tamamlanan Saat" 
-                     min="0"
-                     style="width: 140px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-size: 14px;">
               
-              <button (click)="updateMyProgress()" 
-                      style="background-color: #f59e0b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s;">
-                Kaydet
-              </button>
+              <!-- Sağ Taraf: Saat Güncelleme ve Silme -->
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="number" 
+                       [(ngModel)]="assignment.assignedHours" 
+                       class="hours-input-mini" 
+                       min="0">
+                <button class="btn-save-mini" (click)="updateAssignedHours(assignment)">Kaydet</button>
+                <button class="btn-delete-mini" (click)="removeTaskAssignment(assignment.id || assignment.assignmentId || assignment.taskAssignmentId)">✕</button>
+              </div>
             </div>
-
           </div>
-        </div>
 
-      </ng-container>
+          <!-- GÖREVE PERSONEL ATA -->
+          <div class="assign-section" style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px;">
+            <label class="section-title" style="display: block; font-size: 12px; font-weight: bold; color: #777; margin-bottom: 10px;">GÖREVE PERSONEL ATA</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <select [(ngModel)]="newManageAssignment.employeeId" style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
+                <option value="0" disabled>Personel Seç</option>
+                <option *ngFor="let emp of employees" [value]="emp.id">{{ emp.fullName }}</option>
+              </select>
+              <input type="number" placeholder="Saat" [(ngModel)]="newManageAssignment.assignedHours" style="width: 80px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
+              <button (click)="addNewTaskAssignment()" style="background-color: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer;">+ Ata</button>
+            </div>
+            <p style="font-size: 11px; color: #9ca3af; margin-top: 8px;">Tüm personeller arasından seçim yapabilirsiniz.</p>
+          </div>
 
+        </ng-container>
+
+
+        <!-- ========================================== -->
+        <!-- 2. ÇALIŞAN GÖRÜNÜMÜ                        -->
+        <!-- ========================================== -->
+        <ng-container *ngIf="userRole === 'Çalışan'">
+          
+          <div class="assignment-section" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+            <label class="section-title" style="display: block; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 15px;">İLERLEME DURUMUM</label>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              
+              <!-- Çalışan Bilgileri -->
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="background-color: #4f46e5; color: white; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">
+                  {{ getInitials(userName) }}
+                </div>
+                <div>
+                  <div style="font-weight: 600; color: #1e293b; font-size: 15px; margin-bottom: 4px;">{{ userName }}</div>
+                  <div style="font-size: 13px; color: #64748b;">
+                    Atanan: <strong>{{ selectedManageTask.assignedHours || 0 }} sa</strong> • 
+                    Tamamlanan: <strong>{{ selectedManageTask.completedHours || 0 }} sa</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Saat Güncelleme Aksiyonu -->
+              <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                <input type="number" 
+                       [(ngModel)]="newCompletedHours" 
+                       placeholder="Tamamlanan Saat" 
+                       min="0"
+                       style="width: 140px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-size: 14px;">
+                
+                <button (click)="updateMyProgress()" 
+                        style="background-color: #f59e0b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s;">
+                  Kaydet
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </ng-container>
+
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- YENİ GÖREV MODALI -->
   <div class="modal-overlay" *ngIf="isNewTaskModalOpen">
-  <div class="modal-content">
-    
-    <!-- Üst Başlık -->
-    <div class="modal-header">
-      <h2>Yeni Görev</h2>
-      <button class="close-btn" (click)="closeNewTaskModal()">✕</button>
-    </div>
-
-    <!-- Gövde -->
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Görev Adı</label>
-        <input type="text" [(ngModel)]="newTaskPayload.taskName" placeholder="Örn: API dokümantasyonu">
+    <div class="modal-content">
+      
+      <!-- Üst Başlık -->
+      <div class="modal-header">
+        <h2>Yeni Görev</h2>
+        <button class="close-btn" (click)="closeNewTaskModal()">✕</button>
       </div>
 
-      <div class="form-group">
-        <label>Proje</label>
-   <select [(ngModel)]="newTaskPayload.projectId" name="projectId" class="form-control">
-  <option [ngValue]="0" disabled>Proje Seçin</option>
- 
- <option *ngFor="let p of projects" [ngValue]="p.id">{{ p.projectName }}</option>
-</select>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group half">
-          <label>Başlangıç Tarihi</label>
-          <input type="date" [(ngModel)]="newTaskPayload.startDate">
+      <!-- Gövde -->
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Görev Adı</label>
+          <input type="text" [(ngModel)]="newTaskPayload.taskName" placeholder="Örn: API dokümantasyonu">
         </div>
-        <div class="form-group half">
-          <label>Bitiş Tarihi</label>
-          <input type="date" [(ngModel)]="newTaskPayload.endDate">
+
+        <div class="form-group">
+          <label>Proje</label>
+          <select [(ngModel)]="newTaskPayload.projectId" name="projectId" class="form-control">
+            <option [ngValue]="0" disabled>Proje Seçin</option>
+            <option *ngFor="let p of projects" [ngValue]="p.id">{{ p.projectName }}</option>
+          </select>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>Durum</label>
-        <select [(ngModel)]="newTaskPayload.taskStatus">
-          <option value="Başlamadı">Başlamadı</option>
-          <option value="Devam Ediyor">Devam Ediyor</option>
-          <option value="Beklemede">Beklemede</option>
-          <option value="Tamamlandı">Tamamlandı</option>
-        </select>
-      </div>
-
-      <hr class="divider">
-
-  <div class="assignment-section">
-  <label class="section-title">GÖREVE PERSONEL ATA</label>
-  
-  <div class="assignment-controls">
-    <select [(ngModel)]="tempAssignment.employeeId" class="form-control">
-      <option [ngValue]="0" disabled>Personel Seç</option>
-      <!-- e.id ve e.name kısımlarını konsolda gördüğün değerlerle değiştir -->
-      <option *ngFor="let e of employees" [ngValue]="e.id">{{ e.fullName }}</option>
-    </select>
-    
-  
-    <input 
-      type="number" 
-      class="hours-input" 
-      placeholder="Saat" 
-      [(ngModel)]="tempAssignment.assignedHours"
-      min="1" 
-      onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-    
-    <button class="btn-add-assign" (click)="addAssignment()">+ Ata</button>
-  </div>
-  <p class="hint-text">Tüm personeller arasından seçim yapabilirsiniz.</p>
-
-      <div class="assigned-tags" *ngIf="newTaskPayload.assignments.length > 0">
-  <div class="assign-tag" *ngFor="let a of newTaskPayload.assignments; let i = index">
-    {{ a.fullName }} ({{ a.assignedHours }} sa)
-            <span class="remove-tag" (click)="removeAssignment(i)">x</span>
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Başlangıç Tarihi</label>
+            <input type="date" [(ngModel)]="newTaskPayload.startDate">
+          </div>
+          <div class="form-group half">
+            <label>Bitiş Tarihi</label>
+            <input type="date" [(ngModel)]="newTaskPayload.endDate">
           </div>
         </div>
+
+        <div class="form-group">
+          <label>Durum</label>
+          <select [(ngModel)]="newTaskPayload.taskStatus">
+            <option value="Başlamadı">Başlamadı</option>
+            <option value="Devam Ediyor">Devam Ediyor</option>
+            <option value="Beklemede">Beklemede</option>
+            <option value="Tamamlandı">Tamamlandı</option>
+          </select>
+        </div>
+
+        <hr class="divider">
+
+        <div class="assignment-section">
+          <label class="section-title">GÖREVE PERSONEL ATA</label>
+          
+          <div class="assignment-controls">
+            <select [(ngModel)]="tempAssignment.employeeId" class="form-control">
+              <option [ngValue]="0" disabled>Personel Seç</option>
+              <option *ngFor="let e of employees" [ngValue]="e.id">{{ e.fullName }}</option>
+            </select>
+            
+            <input 
+              type="number" 
+              class="hours-input" 
+              placeholder="Saat" 
+              [(ngModel)]="tempAssignment.assignedHours"
+              min="1" 
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            
+            <button class="btn-add-assign" (click)="addAssignment()">+ Ata</button>
+          </div>
+          <p class="hint-text">Tüm personeller arasından seçim yapabilirsiniz.</p>
+
+          <div class="assigned-tags" *ngIf="newTaskPayload.assignments.length > 0">
+            <div class="assign-tag" *ngFor="let a of newTaskPayload.assignments; let i = index">
+              {{ a.fullName }} ({{ a.assignedHours }} sa)
+              <span class="remove-tag" (click)="removeAssignment(i)">x</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Alt Butonlar -->
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeNewTaskModal()">Vazgeç</button>
+        <button class="btn-submit" (click)="submitTask()">Görevi Oluştur</button>
       </div>
 
     </div>
-
-    <!-- Alt Butonlar -->
-    <div class="modal-footer">
-      <button class="btn-cancel" (click)="closeNewTaskModal()">Vazgeç</button>
-      <button class="btn-submit" (click)="submitTask()">Görevi Oluştur</button>
-    </div>
-
-  </div>
   </div>
 
 </div>

@@ -57,7 +57,6 @@ export class Tasks implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // KULLANICI ROLÜNÜ, İSMİNİ VE ID'SİNİ YAKALIYORUZ
     this.userRole = localStorage.getItem('userRole') || '';
     this.userName = localStorage.getItem('userName') || localStorage.getItem('fullName') || 'Bilinmeyen Kullanıcı'; // İsmi güvenli şekilde aldık
      this.pageHeaderService.setTitle('Görev & Atama');
@@ -66,7 +65,6 @@ export class Tasks implements OnInit {
 
     this.loadDropdownData();
 
-    // ROLE GÖRE VERİ ÇEKME İŞLEMİ
     if (this.userRole === 'Sistem Yöneticisi' || this.userRole === 'Proje Yöneticisi') {
       this.loadManagerTasks();
     } else {
@@ -215,10 +213,10 @@ export class Tasks implements OnInit {
 
   // --- GÖREV YÖNETİM MODALI METOTLARI ---
 
-  openManageModal(task: any) {
-  this.selectedManageTask = { 
+openManageModal(task: any) {
+    this.selectedManageTask = { 
       ...task, 
-      assignees: task.assignees ? [...task.assignees] : [] 
+      assignees: task.assignees ? task.assignees.map((a: any) => ({ ...a })) : [] 
     }; 
     this.isManageModalOpen = true;
   }

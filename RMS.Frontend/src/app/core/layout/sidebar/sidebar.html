@@ -1,98 +1,71 @@
 <aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo-info">
-      <h3>Resource Management System</h3>
+  
+  <!-- LOGO KISMI (Seçenek 4: Bütünleşik Altıgenler - 56px) -->
+  <div class="sidebar-header" style="padding: 20px 18px 14px;">
+    <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+      
+      <div style="width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+            <defs>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+            </defs>
+            <path d="M100 25 L130 42.5 L130 77.5 L100 95 L70 77.5 L70 42.5 Z" fill="#8b5cf6" opacity="0.85" stroke="#151722" stroke-width="4"/>
+            <path d="M68 82 L98 99.5 L98 134.5 L68 152 L38 134.5 L38 99.5 Z" fill="#f59e0b" opacity="0.85" stroke="#151722" stroke-width="4"/>
+            <path d="M132 82 L162 99.5 L162 134.5 L132 152 L102 134.5 L102 99.5 Z" fill="#10b981" opacity="0.85" stroke="#151722" stroke-width="4"/>
+            <circle cx="100" cy="92" r="12" fill="#ffffff" filter="url(#glow)"/>
+            <circle cx="100" cy="92" r="6" fill="#3b82f6" />
+        </svg>
+      </div>
+
+      <div style="display: flex; flex-direction: column; line-height: 1.2;">
+        <span style="font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; color: #fff;">KYS</span>
+        <small style="font-size: 10px; font-weight: 500; color: #8A91B4; white-space: nowrap;">Kaynak Yönetimi Sistemi</small>
+      </div>
     </div>
   </div>
 
+  <!-- MENÜ LİNKLERİ -->
   <nav class="sidebar-menu">
     
-    <!-- ========================================== -->
-    <!-- YÖNETİCİ MENÜSÜ                            -->
-    <!-- ========================================== -->
     <ng-container *ngIf="userRole === 'Sistem Yöneticisi' || userRole === 'Proje Yöneticisi'">
-      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
-        <i class="fa-solid fa-border-all"></i>
-        <span>Panel</span>
-      </a>
-      
-      <a routerLink="/projects" routerLinkActive="active" class="menu-item">
-        <i class="fa-solid fa-folder"></i>
-        <span>Projeler</span>
-      </a>
-      
-      <a routerLink="/tasks" routerLinkActive="active" class="menu-item">
-        <i class="fa-regular fa-square-check"></i>
-        <span>Görev & Atama</span>
-      </a>
-      
-      <a routerLink="/employee-capacity" routerLinkActive="active" class="menu-item">
-        <i class="fa-solid fa-users"></i>
-        <span>Çalışan & Kapasite</span>
-      </a>
-      
-      <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
-        <i class="fa-solid fa-plane"></i>
-        <span>İzin Yönetimi</span>
-      </a>
-      
-      <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
-        <i class="fa-regular fa-calendar"></i>
-        <span>Takvim</span>
-      </a>
-
-       
-      <a routerLink="/settings" routerLinkActive="active" class="menu-item">
-       <!--  BURAYA İ CLASS EKLENECEK  -->
-      Ayarlar
-      </a>
-    
-
+      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item"><span class="ico">▦</span><span class="tx">Panel</span></a>
+      <a routerLink="/projects" routerLinkActive="active" class="menu-item"><span class="ico">⬒</span><span class="tx">Projeler</span></a>
+      <a routerLink="/tasks" routerLinkActive="active" class="menu-item"><span class="ico">☑</span><span class="tx">Görev & Atama</span></a>
+      <a routerLink="/employee-capacity" routerLinkActive="active" class="menu-item"><span class="ico">👥</span><span class="tx">Çalışan & Kapasite</span></a>
+      <a routerLink="/leave-request" routerLinkActive="active" class="menu-item"><span class="ico">✈</span><span class="tx">İzin Yönetimi</span></a>
+      <a routerLink="/calendar" routerLinkActive="active" class="menu-item"><span class="ico">▤</span><span class="tx">Takvim</span></a>
+      <a routerLink="/settings" routerLinkActive="active" class="menu-item"><span class="ico">⚙</span><span class="tx">Ayarlar</span></a>
     </ng-container>
 
-    <!-- ========================================== -->
-    <!-- PERSONEL MENÜSÜ                            -->
-    <!-- ========================================== -->
-   <ng-container *ngIf="userRole === 'Personel'|| userRole === 'Çalışan'">
-      
-      <!-- İŞTE BURAYI DÜZELTTİK: /employee-dashboard oldu -->
-      <a routerLink="/employee-dashboard" routerLinkActive="active" class="menu-item">
-        <i class="fa-solid fa-border-all"></i>
-        <span>Panel</span>
-      </a>
-      
-      <a routerLink="/tasks" routerLinkActive="active" class="menu-item">
-        <i class="fa-regular fa-square-check"></i>
-        <span>Görevlerim</span>
-      </a>
-      
-      <a routerLink="/leave-request" routerLinkActive="active" class="menu-item">
-        <i class="fa-solid fa-plane"></i>
-        <span>İzinlerim</span>
-      </a>
-      
-      <a routerLink="/calendar" routerLinkActive="active" class="menu-item">
-        <i class="fa-regular fa-calendar"></i>
-        <span>Takvim</span>
-      </a>
-
-      <a routerLink="/settings" routerLinkActive="active" class="menu-item">
-        <!--  BURAYA İ CLASS EKLENECEK  -->
-        Ayarlar
-      </a>
-
+    <!-- PERSONEL MENÜSÜ -->
+    <ng-container *ngIf="userRole === 'Personel'|| userRole === 'Çalışan'">
+      <a routerLink="/employee-dashboard" routerLinkActive="active" class="menu-item"><span class="ico">▦</span><span class="tx">Panel</span></a>
+      <a routerLink="/tasks" routerLinkActive="active" class="menu-item"><span class="ico">☑</span><span class="tx">Görevlerim</span></a>
+      <a routerLink="/leave-request" routerLinkActive="active" class="menu-item"><span class="ico">✈</span><span class="tx">İzinlerim</span></a>
+      <a routerLink="/calendar" routerLinkActive="active" class="menu-item"><span class="ico">▤</span><span class="tx">Takvim</span></a>
+      <a routerLink="/settings" routerLinkActive="active" class="menu-item"><span class="ico">⚙</span><span class="tx">Ayarlar</span></a>
     </ng-container>
-
-      
 
   </nav>
 
-  <!-- Dinamik Kullanıcı Bilgileri -->
-  <div class="sidebar-footer">
+  <!-- KULLANICI BİLGİLERİ VE ÇIKIŞ BUTONU -->
+  <div class="sidebar-footer" style="display: flex; align-items: center; gap: 10px; padding: 14px;">
     <div class="avatar">{{ userInitials }}</div>
-    <div class="user-details">
-      <span class="name">{{ userName }}</span>
-      <span class="role">{{ userRole }}</span>
+    
+    <div class="user-details" style="flex: 1; min-width: 0;">
+      <span class="name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; color: #fff; font-weight: 600; font-size: 13.5px;">{{ userName }}</span>
+      <span class="role" style="font-size: 11px; color: #8A91B4; display: block;">{{ userRole }}</span>
     </div>
+
+    <!-- KIRMIZI, SAĞA YASLI VE 1.5 KAT BÜYÜTÜLMÜŞ ÇIKIŞ BUTONU (33x33) -->
+    <button class="logout-btn" (click)="logout()" title="Çıkış Yap" style="background: transparent; border: none; cursor: pointer; padding: 8px; margin-left: auto; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s;">
+      <svg width="29" height="29" viewBox="0 0 24 24" fill="#ef4444" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 3C2.4477 3 2 3.4477 2 4V20C2 20.5523 2.4477 21 3 21H12C12.5523 21 13 20.5523 13 20V15H10V18H5V6H10V9H13V4C13 3.4477 12.5523 3 12 3H3Z" />
+        <path d="M16 8L22 12L16 16V13H8V11H16V8Z" />
+      </svg>
+    </button>
   </div>
 </aside>
